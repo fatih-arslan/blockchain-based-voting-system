@@ -1,0 +1,41 @@
+﻿@model Election
+
+@{
+    ViewData["Title"] = "Add Election";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Election" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Title" class="control-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate" class="control-label">Start Date</label>
+        <input asp-for="StartDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate" class="control-label">End Date</label>
+        <input asp-for="EndDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile" class="control-label">Image Upload</label>
+        <input asp-for="ImageFile" type="file" class="form-control-file" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Election</button>
+</form>

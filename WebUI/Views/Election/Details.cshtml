@@ -1,0 +1,52 @@
+﻿@model Election
+
+@{
+    ViewData["Title"] = "Election Details";
+    TempData["ElectionId"] = Model.Id;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <img src="/@Model.ImagePath" class="card-img-top" alt="Election Image">                
+            </div> 
+        </div>   
+        
+        <div class="col-md-6">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>
+                <p class="card-text">@Model.Description</p>
+                <p class="card-text">Start Date: @Model.StartDate.ToString("MMMM dd, yyyy")</p>
+                <p class="card-text">End Date: @Model.EndDate.ToString("MMMM dd, yyyy")</p>
+            </div>
+
+            <!-- Display Candidates -->
+            @if (Model.Candidates.Any())
+            {
+                <h3 class="mt-4">Candidates:</h3>
+                <ul>
+                    @foreach (var candidate in Model.Candidates)
+                    {
+                        <li>
+                            <img src="@candidate.ImagePath"/>
+                            @candidate.Name @candidate.Surname
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No candidates available.</p>
+            }
+            <a href="@Url.Action("Create", "Candidate")" class="btn btn-success">Add Candidate</a>
+
+        </div>
+        
+    </div>       
+</div>
+
+
+
