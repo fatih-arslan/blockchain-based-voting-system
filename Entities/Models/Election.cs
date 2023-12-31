@@ -32,7 +32,7 @@ namespace Entities.Models
         public DateTime EndDate { get; set; }
 
         [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         public string? ImagePath { get; set; }
         public List<Candidate> Candidates { get; set; }

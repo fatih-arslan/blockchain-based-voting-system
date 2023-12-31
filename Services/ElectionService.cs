@@ -20,12 +20,7 @@ namespace Services
 
         public void AddElection(Election election)
         {
-            var fileName = election.ImageFile.FileName;
-            var imagePath = Path.Combine("wwwroot/images", fileName);
-            using (var stream = new FileStream(imagePath, FileMode.Create))
-            {
-                election.ImageFile.CopyTo(stream);
-            }
+            string fileName = CommonUtilities.SaveImage(election.ImageFile);
             election.ImagePath = $"images/{fileName}";
             _electionRepository.AddElection(election);
         }
@@ -47,6 +42,11 @@ namespace Services
 
         public void UpdateElection(Election election)
         {
+            if(election.ImageFile != null)
+            {
+                string fileName = CommonUtilities.SaveImage(election.ImageFile);
+                election.ImagePath = $"images/{fileName}";
+            }
             _electionRepository.UpdateElection(election);
         }
     }

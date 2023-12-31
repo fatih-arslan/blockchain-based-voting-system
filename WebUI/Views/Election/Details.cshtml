@@ -27,24 +27,35 @@
             @if (Model.Candidates.Any())
             {
                 <h3 class="mt-4">Candidates:</h3>
-                <ul>
+                <div class="row">
                     @foreach (var candidate in Model.Candidates)
                     {
-                        <li>
-                            <img src="@candidate.ImagePath"/>
-                            @candidate.Name @candidate.Surname
-                        </li>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="/@candidate.ImagePath" class="card-img-top" height="200" width="50" alt="Candidate Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">@candidate.Name @candidate.Surname</h5>
+                                </div>
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
                 <p>No candidates available.</p>
             }
-            <a href="@Url.Action("Create", "Candidate")" class="btn btn-success">Add Candidate</a>
 
         </div>
-        
+        <div class="col-md-12">
+            <div class="card-footer ">
+                <p class="card-text">
+                    <a class="btn btn-outline-primary" asp-action="Index">
+                        Back to list
+                    </a>                    
+                </p>
+            </div>
+        </div>
     </div>       
 </div>
 

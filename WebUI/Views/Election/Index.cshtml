@@ -8,7 +8,7 @@
 
 <div class="row">
     @foreach (var election in Model)
-    {
+    {       
         <div class="col-md-4 mb-4">
             <div class="card">
                 <img src="/@election.ImagePath" class="card-img-top" alt="Election Image" width="200" height="250">
@@ -16,14 +16,17 @@
                     <h5 class="card-title">@election.Title</h5>
                     <p class="card-text">Start Date: @election.StartDate.ToString("MMMM dd, yyyy")</p>
                     <p class="card-text">End Date: @election.EndDate.ToString("MMMM dd, yyyy")</p>
-                    <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" class="btn btn-primary">View Details</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" class="btn btn-outline-primary">View Details</a>
+                        <a asp-controller="Election" asp-action="Edit" asp-route-id="@election.Id" class="btn btn-outline-primary ml-auto"><i class="bi bi-pencil-square"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
     }
 
     <div class="mt-4">
-        <a href="@Url.Action("Create", "Election")" class="btn btn-success">Add New Election</a>
+        <a asp-action="Create" class="btn btn-success">Add New Election</a>
     </div>
 </div>
 

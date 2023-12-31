@@ -37,7 +37,7 @@ namespace DataAccess.Repositories
 
         public void UpdateElection(Election election)
         {
-            UpdateElection(election);
+            Update(election);
         }
     }
 }

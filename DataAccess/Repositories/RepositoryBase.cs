@@ -27,9 +27,13 @@ namespace DataAccess.Repositories
             _context.SaveChanges();
         }
 
-        public IEnumerable<T> GetAll(bool trackChanges, string? includeProperties = null)
+        public IEnumerable<T> GetAll(bool trackChanges, string? includeProperties = null, Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = _dbSet;
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
             if(!string.IsNullOrEmpty(includeProperties))
             {
                 foreach(var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
@@ -61,9 +65,10 @@ namespace DataAccess.Repositories
 
         }
 
-        public void Update(T entity)
+        public void Update(T entityToUpdate)
         {
-            _dbSet.Update(entity);
+            _dbSet.Attach(entityToUpdate);
+            _context.Entry(entityToUpdate).State = EntityState.Modified;
             _context.SaveChanges();
         }
     }

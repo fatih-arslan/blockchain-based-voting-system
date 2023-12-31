@@ -10,7 +10,7 @@ namespace DataAccess.Repositories.Contracts
     public interface IRepositoryBase<T> where T : class
     {
         void Add(T entity);
-        IEnumerable<T> GetAll(bool trackChanges, string? includeProperties);
+        IEnumerable<T> GetAll(bool trackChanges, string? includeProperties, Expression<Func<T, bool>> filter);
         T? GetByCondition(Expression<Func<T, bool>> condition, bool trackChanges, string? includeProperties);
         void Update(T entity);
         void Remove(T entity);  

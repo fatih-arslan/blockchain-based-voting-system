@@ -21,12 +21,7 @@ namespace Services
 
         public void AddCandidate(Candidate candidate)
         {
-            var fileName = candidate.ImageFile.FileName;
-            var imagePath = Path.Combine("wwwroot/images", fileName);
-            using(var stream = new FileStream(imagePath, FileMode.Create))
-            {
-                candidate.ImageFile.CopyTo(stream);
-            }
+            string fileName = CommonUtilities.SaveImage(candidate.ImageFile);
             candidate.ImagePath = $"images/{fileName}";
             _candidateRepository.AddCandidate(candidate);
         }
@@ -48,6 +43,11 @@ namespace Services
 
         public void UpdateCandidate(Candidate candidate)
         {
+            if(candidate.ImageFile != null)
+            {
+                string fileName = CommonUtilities.SaveImage(candidate.ImageFile);
+                candidate.ImagePath = $"images/{fileName}";
+            }
             _candidateRepository.UpdateCandidate(candidate);
         }
     }

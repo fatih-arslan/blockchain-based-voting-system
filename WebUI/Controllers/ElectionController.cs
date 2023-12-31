@@ -37,8 +37,27 @@ namespace WebUI.Controllers
 
         public IActionResult Details(int id)
         {
-            Election? election = _electionService.GetElectionById(id, true);
+            Election? election = _electionService.GetElectionById(id, false);
+            // To do election not found page
             return View(election);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            Election? election = _electionService.GetElectionById(id, true);
+            // To do election not found page
+            return View(election);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Election newElection)
+        {
+            if(ModelState.IsValid)
+            {
+                _electionService.UpdateElection(newElection);
+                return RedirectToAction("Index");
+            }            
+            return View(newElection);
         }
     }
 }
