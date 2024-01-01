@@ -9,9 +9,12 @@ namespace Services.CommonUtilities
 {
     public class FileHelper
     {
-        public static string DefaultFileName { get; set; } = "default.png";
-        public static string DefaultFilePath { get; set; } = $"/images/{DefaultFileName}";
+        public static string DefaultElectionFileName { get; set; } = "electionDefault.png";
+        public static string DefaultCandidateFileName { get; set; } = "candidateDefault.png";
+        public static string DefaultElectionFilePath { get; set; } = $"/images/{DefaultElectionFileName}";
+        public static string DefaultCandidateFilePath { get; set; } = $"/images/{DefaultCandidateFileName}";
         public static string DefaultDirectory { get; set; } = "wwwroot/images";
+
         public static string SaveImage(IFormFile image, string path = null)
         {
             var fileName = image.FileName;

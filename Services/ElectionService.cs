@@ -21,7 +21,7 @@ namespace Services
 
         public void AddElection(Election election)
         {
-            string fileName = FileHelper.DefaultFileName;
+            string fileName = FileHelper.DefaultElectionFileName;
             if(election.ImageFile != null)
             {
                 fileName = FileHelper.SaveImage(election.ImageFile);
@@ -43,8 +43,8 @@ namespace Services
 
         public void RemoveElection(Election election)
         {
-            string filePath = election.ImagePath;
-            if(filePath != null && filePath != FileHelper.DefaultFilePath) 
+            string? filePath = election.ImagePath;
+            if(filePath != null && filePath != FileHelper.DefaultElectionFilePath) 
             {
 				FileHelper.DeleteImage(filePath);
 			}
@@ -56,7 +56,7 @@ namespace Services
             if(election.ImageFile != null)
             {
                 string? oldFilePath = election.ImagePath;
-                if(oldFilePath != null && oldFilePath != FileHelper.DefaultFilePath)
+                if(oldFilePath != null && oldFilePath != FileHelper.DefaultElectionFilePath)
                 {                    
                     FileHelper.DeleteImage(oldFilePath);
                 }

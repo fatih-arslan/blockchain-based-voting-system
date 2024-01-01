@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Election Details";
-    TempData["ElectionId"] = Model.Id;
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -32,9 +31,13 @@
                     {
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/@candidate.ImagePath" class="card-img-top" height="200" width="50" alt="Candidate Image">
+                                <img src="@candidate.ImagePath" class="card-img-top" height="200" width="50" alt="Candidate Image">
                                 <div class="card-body">
-                                    <h5 class="card-title">@candidate.Name @candidate.Surname</h5>
+                                    <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
+                                        <h5 class="card-title">
+                                            @candidate.Name @candidate.Surname 
+                                        </h5>
+                                        </a>
                                 </div>
                             </div>
                         </div>

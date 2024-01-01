@@ -1,7 +1,7 @@
 ﻿@model Candidate
 
 @{
-    ViewData["Title"] = "Add Candidate";
+    ViewData["Title"] = "Edit Candidate";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -11,13 +11,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="col-md-6">
-                <img src="/images/default.png" width="75%" id="ImageURLPreview" />
+                <img src="@Model.ImagePath" width="75%" id="ImageURLPreview" />
             </div>
-            <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly"></div>
-                <input asp-for="ElectionId" hidden />
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly"></div>                
                 <div class="row">
                     <div class="col-md-6">
+                        <input asp-for="Id" hidden />
                         <input asp-for="ElectionId" type="hidden" value="@Model.ElectionId" />
                         <input asp-for="ImagePath" class="form-control" hidden/>
                         <div class="mb-3">
@@ -35,7 +35,7 @@
                             <input asp-for="ImageFile" class="form-control" />
                             <span asp-validation-for="ImageFile" class="text-danger"></span>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Description" class="form-label"></label>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="mb-3" style="margin-top:10px;">
-                    <input type="submit" value="Add" class="btn btn-outline-success float-end" />
+                    <input type="submit" value="Update" class="btn btn-outline-success float-end" />
                     <a class="btn btn-outline-secondary" asp-controller="Election" asp-action="Edit" asp-route-id="@Model.ElectionId">Back</a>
                 </div>
             </form>

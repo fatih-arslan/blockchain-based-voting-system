@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Contracts;
+using System.ComponentModel.Design;
 
 namespace WebUI.Controllers
 {
@@ -30,5 +31,41 @@ namespace WebUI.Controllers
             
             return View();
         }
+
+        public IActionResult Details(int id)
+        {
+            Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            return View(candidate);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            return View(candidate);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Candidate newCandidate) 
+        {
+            if (ModelState.IsValid)
+            {
+                _candidateService.UpdateCandidate(newCandidate);
+                return RedirectToAction("Edit", "Election", new { id = newCandidate.ElectionId });
+
+            }            
+            return View(newCandidate);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Candidate? candidate = _candidateService.GetCandidateById(id, true);            
+            if(candidate != null)
+            {
+                int electionId = candidate.ElectionId;
+                _candidateService.RemoveCandidate(candidate);
+				return RedirectToAction("Edit", "Election", new { id = electionId });
+			}
+            return View("NotFound");
+		}
     }
 }

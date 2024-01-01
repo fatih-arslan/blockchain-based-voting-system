@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Services
 {
@@ -22,8 +23,12 @@ namespace Services
 
         public void AddCandidate(Candidate candidate)
         {
-            string fileName = FileHelper.SaveImage(candidate.ImageFile);
-            candidate.ImagePath = $"images/{fileName}";
+            string fileName = FileHelper.DefaultCandidateFileName;
+            if(candidate.ImageFile != null)
+            {
+                fileName = FileHelper.SaveImage(candidate.ImageFile);
+            }
+            candidate.ImagePath = $"/images/{fileName}";
             _candidateRepository.AddCandidate(candidate);
         }
 
@@ -39,6 +44,11 @@ namespace Services
 
         public void RemoveCandidate(Candidate candidate)
         {
+            string? filePath = candidate.ImagePath;
+            if (filePath != null && filePath != FileHelper.DefaultCandidateFilePath)
+            {
+                FileHelper.DeleteImage(filePath);
+            }
             _candidateRepository.RemoveCandidate(candidate);
         }
 
@@ -46,8 +56,13 @@ namespace Services
         {
             if(candidate.ImageFile != null)
             {
+                string? oldFilePath = candidate.ImagePath;
+                if (oldFilePath != null && oldFilePath != FileHelper.DefaultCandidateFilePath)
+                {
+                    FileHelper.DeleteImage(oldFilePath);
+                }
                 string fileName = FileHelper.SaveImage(candidate.ImageFile);
-                candidate.ImagePath = $"images/{fileName}";
+                candidate.ImagePath = $"/images/{fileName}";
             }
             _candidateRepository.UpdateCandidate(candidate);
         }
