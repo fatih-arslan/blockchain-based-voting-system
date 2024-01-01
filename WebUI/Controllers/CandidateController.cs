@@ -14,9 +14,9 @@ namespace WebUI.Controllers
             _candidateService = candidateService;
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int electionId)
         {
-            return View();
+            return View(new Candidate {ElectionId = electionId});
         }
 
         [HttpPost]
@@ -25,7 +25,7 @@ namespace WebUI.Controllers
             if (ModelState.IsValid)
             {
                 _candidateService.AddCandidate(candidate);
-                return RedirectToAction("Details", "Election", new {id = candidate.ElectionId});
+                return RedirectToAction("Edit", "Election", new {id = candidate.ElectionId});
             }     
             
             return View();

@@ -1,5 +1,6 @@
 ﻿using DataAccess.Repositories.Contracts;
 using Entities.Models;
+using Services.CommonUtilities;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,13 @@ namespace Services
 
         public void AddElection(Election election)
         {
-            string fileName = CommonUtilities.SaveImage(election.ImageFile);
-            election.ImagePath = $"images/{fileName}";
+            string fileName = FileHelper.DefaultFileName;
+            if(election.ImageFile != null)
+            {
+                fileName = FileHelper.SaveImage(election.ImageFile);
+
+            }
+            election.ImagePath = $"/images/{fileName}";
             _electionRepository.AddElection(election);
         }
 
@@ -37,6 +43,11 @@ namespace Services
 
         public void RemoveElection(Election election)
         {
+            string filePath = election.ImagePath;
+            if(filePath != null && filePath != FileHelper.DefaultFilePath) 
+            {
+				FileHelper.DeleteImage(filePath);
+			}
             _electionRepository.RemoveElection(election);
         }
 
@@ -44,8 +55,13 @@ namespace Services
         {
             if(election.ImageFile != null)
             {
-                string fileName = CommonUtilities.SaveImage(election.ImageFile);
-                election.ImagePath = $"images/{fileName}";
+                string? oldFilePath = election.ImagePath;
+                if(oldFilePath != null && oldFilePath != FileHelper.DefaultFilePath)
+                {                    
+                    FileHelper.DeleteImage(oldFilePath);
+                }
+                string fileName = FileHelper.SaveImage(election.ImageFile);
+                election.ImagePath = $"/images/{fileName}";
             }
             _electionRepository.UpdateElection(election);
         }

@@ -58,6 +58,16 @@ namespace WebUI.Controllers
                 return RedirectToAction("Index");
             }            
             return View(newElection);
+        }       
+
+        public IActionResult Delete(int id)
+        {
+            Election? election = _electionService.GetElectionById(id, true);
+            if(election != null)
+            {
+                _electionService.RemoveElection(election);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

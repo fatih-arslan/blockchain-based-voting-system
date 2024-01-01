@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using DataAccess.Repositories.Contracts;
 using Entities.Models;
+using Services.CommonUtilities;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Services
 
         public void AddCandidate(Candidate candidate)
         {
-            string fileName = CommonUtilities.SaveImage(candidate.ImageFile);
+            string fileName = FileHelper.SaveImage(candidate.ImageFile);
             candidate.ImagePath = $"images/{fileName}";
             _candidateRepository.AddCandidate(candidate);
         }
@@ -45,7 +46,7 @@ namespace Services
         {
             if(candidate.ImageFile != null)
             {
-                string fileName = CommonUtilities.SaveImage(candidate.ImageFile);
+                string fileName = FileHelper.SaveImage(candidate.ImageFile);
                 candidate.ImagePath = $"images/{fileName}";
             }
             _candidateRepository.UpdateCandidate(candidate);
