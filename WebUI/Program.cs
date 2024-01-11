@@ -1,6 +1,8 @@
 using DataAccess.Data;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Contracts;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Contracts;
@@ -18,6 +20,16 @@ builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<IElectionService, ElectionService>();   
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 
+builder.Services.AddIdentity<ApplicationUser , IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.Zero;    
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,10 +45,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+AppDbInitializer.SeedUsersAndRoles(app).Wait();
 app.Run();

@@ -9,7 +9,6 @@ namespace Entities.Models
 {
     public class Vote
     {
-        [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ElectionId { get; set; }

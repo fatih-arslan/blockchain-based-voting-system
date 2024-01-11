@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#candidate-card .img-fluid {
+    max-width: 200px !important;
+    height: 230px !important;
+}
