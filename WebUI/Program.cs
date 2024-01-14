@@ -2,6 +2,7 @@ using DataAccess.Data;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
@@ -21,13 +22,15 @@ builder.Services.AddScoped<IElectionService, ElectionService>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 
 builder.Services.AddIdentity<ApplicationUser , IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddRoles<IdentityRole>();
 
+builder.Services.AddSession();
+builder.Services.AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
-    options.ExpireTimeSpan = TimeSpan.Zero;    
 });
 
 var app = builder.Build();
@@ -44,6 +47,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

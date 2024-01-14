@@ -32,7 +32,7 @@
 						</div>
 						<div class="mb-3">
 							<label asp-for="ImageFile" class="form-label"></label>
-							<input asp-for="ImageFile" class="form-control" />
+							<input asp-for="ImageFile" class="form-control" id="ImageFile"/>
 							<span asp-validation-for="ImageFile" class="text-danger"></span>
 						</div>
 					</div>
@@ -167,7 +167,9 @@
 
 				reader.readAsDataURL(input.files[0]);
 			}
-		}		
+		}
+		// Attach the 'change' event listener to the file input
+		document.getElementById('ImageFile').addEventListener('change', previewImage);
 	</script>
 	
 }

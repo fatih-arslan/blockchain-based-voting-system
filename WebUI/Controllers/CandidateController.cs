@@ -1,4 +1,6 @@
-﻿using Entities.Models;
+﻿using DataAccess.Static;
+using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Contracts;
@@ -15,6 +17,7 @@ namespace WebUI.Controllers
             _candidateService = candidateService;
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Create(int electionId)
         {
             return View(new Candidate {ElectionId = electionId});
@@ -38,11 +41,13 @@ namespace WebUI.Controllers
             return View(candidate);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Edit(int id)
         {
             Candidate? candidate = _candidateService.GetCandidateById(id, false);
             return View(candidate);
         }
+
 
         [HttpPost]
         public IActionResult Edit(Candidate newCandidate) 
@@ -56,6 +61,7 @@ namespace WebUI.Controllers
             return View(newCandidate);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Delete(int id)
         {
             Candidate? candidate = _candidateService.GetCandidateById(id, true);            

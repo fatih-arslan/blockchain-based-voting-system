@@ -1,4 +1,5 @@
-﻿@model List<Election>
+﻿@using DataAccess.Static;
+@model List<Election>
 
 @{
     ViewData["Title"] = "Available Elections";
@@ -18,16 +19,24 @@
                     <p class="card-text">End Date: @election.EndDate.ToString("MMMM dd, yyyy")</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" class="btn btn-outline-primary">View Details</a>
+                        
+                        @if(User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Voter))
+                        {
+                            <a asp-controller="Election" asp-action="Vote" asp-route-id="@election.Id" class="btn btn-outline-primary">Vote</a>
+                        }
 
-                        <div class="d-flex">
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-@election.Id">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                            <div style="width: 10px;"></div>
-                            <a asp-controller="Election" asp-action="Edit" asp-route-id="@election.Id" class="btn btn-outline-primary">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                        </div>
+                        @if(User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Admin))
+                        {
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-@election.Id">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <div style="width: 10px;"></div>
+                                <a asp-controller="Election" asp-action="Edit" asp-route-id="@election.Id" class="btn btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </div>
+                        }                        
                     </div>
                 </div>
             </div>
@@ -53,10 +62,12 @@
             </div>
         </div>
     }
-
-    <div class="mt-4">
-        <a asp-action="Create" class="btn btn-success">Add New Election</a>
-    </div>
+    @if(User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Admin))
+    {
+        <div class="mt-4">
+            <a asp-action="Create" class="btn btn-success">Add New Election</a>
+        </div>
+    }    
 </div>
 
 

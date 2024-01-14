@@ -1,4 +1,6 @@
-﻿using Entities.Models;
+﻿using DataAccess.Static;
+using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -19,6 +21,7 @@ namespace WebUI.Controllers
             return View(elections);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Create()
         {
             return View();
@@ -42,6 +45,7 @@ namespace WebUI.Controllers
             return View(election);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Edit(int id)
         {
             Election? election = _electionService.GetElectionById(id, true);
@@ -68,6 +72,13 @@ namespace WebUI.Controllers
                 _electionService.RemoveElection(election);
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = UserRoles.Voter)]
+        public IActionResult Vote(int id)
+        {
+            Election? election = _electionService.GetElectionById(id, false);
+            return View(election);
         }
     }
 }
