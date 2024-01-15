@@ -1,5 +1,6 @@
 ﻿using DataAccess.Static;
 using Entities.Models;
+using Entities.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
@@ -41,7 +42,10 @@ namespace WebUI.Controllers
         public IActionResult Details(int id)
         {
             Election? election = _electionService.GetElectionById(id, false);
-            // To do election not found page
+            if(election == null)
+            {
+                return View("NotFound", new NotFoundVM("Election"));
+            }
             return View(election);
         }
 
@@ -49,7 +53,10 @@ namespace WebUI.Controllers
         public IActionResult Edit(int id)
         {
             Election? election = _electionService.GetElectionById(id, true);
-            // To do election not found page
+            if (election == null)
+            {
+                return View("NotFound", new NotFoundVM("Election"));
+            }
             return View(election);
         }
 
@@ -78,7 +85,17 @@ namespace WebUI.Controllers
         public IActionResult Vote(int id)
         {
             Election? election = _electionService.GetElectionById(id, false);
+            if (election == null)
+            {
+                return View("NotFound", new NotFoundVM("Election"));
+            }
             return View(election);
+        }
+
+        public async Task<IActionResult> GetResults(int id)
+        {
+            ElectionResultVM result = await _electionService.GetElectionResult(id);
+            return View(result);
         }
     }
 }

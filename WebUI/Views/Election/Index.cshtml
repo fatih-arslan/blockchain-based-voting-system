@@ -17,10 +17,16 @@
                     <h5 class="card-title">@election.Title</h5>
                     <p class="card-text">Start Date: @election.StartDate.ToString("MMMM dd, yyyy")</p>
                     <p class="card-text">End Date: @election.EndDate.ToString("MMMM dd, yyyy")</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" class="btn btn-outline-primary">View Details</a>
-                        
-                        @if(User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Voter))
+                    <div class="d-flex justify-content-between align-items-center">                        
+                        <div class="d-flex">
+                            <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" class="btn btn-outline-primary">View Details</a>
+                            <div style="width: 5px;"></div>                            
+                            @if (User.Identity.IsAuthenticated && (User.IsInRole(UserRoles.Admin) || User.IsInRole(UserRoles.Voter)))
+                            {
+                                <a asp-controller="Election" asp-action="GetResults" asp-route-id="@election.Id" class="btn btn-outline-primary">See results</a>
+                            }
+                        </div>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Voter))
                         {
                             <a asp-controller="Election" asp-action="Vote" asp-route-id="@election.Id" class="btn btn-outline-primary">Vote</a>
                         }
@@ -31,7 +37,7 @@
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal-@election.Id">
                                     <i class="bi bi-trash"></i>
                                 </button>
-                                <div style="width: 10px;"></div>
+                                <div style="width: 5px;"></div>
                                 <a asp-controller="Election" asp-action="Edit" asp-route-id="@election.Id" class="btn btn-outline-primary">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

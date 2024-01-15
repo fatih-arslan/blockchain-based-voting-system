@@ -1,5 +1,6 @@
 ﻿using DataAccess.Static;
 using Entities.Models;
+using Entities.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -38,6 +39,10 @@ namespace WebUI.Controllers
         public IActionResult Details(int id)
         {
             Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            if(candidate == null)
+            {
+                return View("NotFound", new NotFoundVM("Candidate"));
+            }
             return View(candidate);
         }
 
@@ -45,6 +50,10 @@ namespace WebUI.Controllers
         public IActionResult Edit(int id)
         {
             Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            if (candidate == null)
+            {
+                return View("NotFound", new NotFoundVM("Candidate"));
+            }
             return View(candidate);
         }
 
@@ -71,7 +80,7 @@ namespace WebUI.Controllers
                 _candidateService.RemoveCandidate(candidate);
 				return RedirectToAction("Edit", "Election", new { id = electionId });
 			}
-            return View("NotFound");
-		}
+            return View("NotFound", new NotFoundVM("Candidate"));
+        }
     }
 }

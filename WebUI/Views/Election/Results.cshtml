@@ -1,0 +1,43 @@
+﻿@using Entities.ViewModels;
+@model ElectionResultVM
+
+<!-- Include Web3.js library -->
+<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 class="mb-4">Election Results</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var candidate in Model.Candidates)
+        {
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                    <img src="@candidate.ImagePath" class="card-img-top rounded" alt="Candidate Image" />
+                    <div class="card-body">
+                        <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
+                            <h5 class="card-title text-dark opacity-75 text-uppercase text-center mb-2">@candidate.Name @candidate.Surname</h5>
+                        </a>
+                        <p>@candidate.VoteCount</p>
+                    </div>
+                </div>
+            </div>            
+        }
+    </div>
+</div>
+
+<div class="col-md-12 mt-4">
+    <div class="card-footer">
+        <p class="card-text">
+            <div class="mb-3" style="margin-top:10px;">
+                <a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
+            </div>
+        </p>
+    </div>
+</div>
+
+<div style="height: 50px"></div>
+

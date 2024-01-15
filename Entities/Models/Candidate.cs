@@ -13,7 +13,7 @@ namespace Entities.Models
     {
         public Candidate()
         {
-            Votes = new List<Vote>();
+            VoteCount = 0;
         }
 
         [Key]
@@ -34,9 +34,6 @@ namespace Entities.Models
         public string? ImagePath { get; set; }
 
         [NotMapped]
-        public List<Vote> Votes { get; set; }
-
-        [NotMapped]
-        public int VoteCount => Votes.Count;        
+        public int VoteCount { get; set; }        
     }
 }
