@@ -16,10 +16,8 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult AddVote([FromBody] Vote vote)
         {
-            // Add logic to store the vote in the repository
             _voteRepository.AddVote(vote);
-
-            return Ok(); // Return a success response
+            return Ok(); 
         }
     }
 }

@@ -24,11 +24,12 @@ namespace Entities.Models
 
         [Required]
         [DataType(DataType.DateTime)]
+        [DateEqualOrGreaterThanToday(ErrorMessage = "Start Date cannot be earlier than today.")]
         public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        [LaterThan(nameof(StartDate), ErrorMessage = "End Date must be later than Start Date.")]
+        [DateGreaterThan(nameof(StartDate), ErrorMessage = "End Date must be later than Start Date.")]
         public DateTime EndDate { get; set; }
 
         [NotMapped]
