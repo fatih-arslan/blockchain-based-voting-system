@@ -10,11 +10,7 @@ using Microsoft.AspNetCore.Http;
 namespace Entities.Models
 {
     public class Candidate
-    {
-        public Candidate()
-        {
-            VoteCount = 0;
-        }
+    {        
 
         [Key]
         public int Id { get; set; }
@@ -34,6 +30,9 @@ namespace Entities.Models
         public string? ImagePath { get; set; }
 
         [NotMapped]
-        public int VoteCount { get; set; }        
+        public int VoteCount { get; set; }
+
+        [NotMapped]
+        public float VotePercent { get; set; }
     }
 }

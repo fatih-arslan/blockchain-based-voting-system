@@ -12,7 +12,6 @@ namespace Entities.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ElectionId { get; set; }
-        public int CandidateId { get; set; }
         public DateTime VoteDate { get; set; }
     }
 }

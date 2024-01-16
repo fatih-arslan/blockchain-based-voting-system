@@ -1,7 +1,7 @@
 ﻿using DataAccess.Repositories.Contracts;
 using Entities.Models;
 using Entities.ViewModels;
-using Services.CommonUtilities;
+using Services.Utilities;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -14,10 +14,12 @@ using Nethereum.Contracts;
 using Nethereum.RPC.Eth.DTOs;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Nethereum.ABI.FunctionEncoding.Attributes;
+using Entities.DTOs;
+using DataAccess.Static;
 
 namespace Services
 {
-   
+
     public class ElectionService : IElectionService
     {
         private readonly IElectionRepository _electionRepository;
@@ -79,126 +81,8 @@ namespace Services
             // Ethereum web3 instance using MetaMask's injected Web3
             var web3 = new Web3("https://sepolia.infura.io/v3/51bd736f18d645e7b4832e8803d5a257");
 
-            // Replace with the contract address and ABI
-            string contractAddress = "0xAD9F2cE5294dE228A712811fAAD343eCaB4D8Dda";
-            string contractAbi = @"
-              [
-	{
-		""inputs"": [
-			{
-				""internalType"": ""uint256"",
-				""name"": ""_electionId"",
-				""type"": ""uint256""
-			},
-			{
-				""internalType"": ""string"",
-				""name"": ""_electionName"",
-				""type"": ""string""
-			},
-			{
-				""internalType"": ""uint256"",
-				""name"": ""_candidateId"",
-				""type"": ""uint256""
-			},
-			{
-				""internalType"": ""string"",
-				""name"": ""_candidateName"",
-				""type"": ""string""
-			}
-		],
-		""name"": ""vote"",
-		""outputs"": [],
-		""stateMutability"": ""nonpayable"",
-		""type"": ""function""
-	},
-	{
-		""inputs"": [
-			{
-				""internalType"": ""uint256"",
-				""name"": """",
-				""type"": ""uint256""
-			},
-			{
-				""internalType"": ""uint256"",
-				""name"": """",
-				""type"": ""uint256""
-			}
-		],
-		""name"": ""electionResults"",
-		""outputs"": [
-			{
-				""internalType"": ""uint256"",
-				""name"": """",
-				""type"": ""uint256""
-			}
-		],
-		""stateMutability"": ""view"",
-		""type"": ""function""
-	},
-	{
-		""inputs"": [
-			{
-				""internalType"": ""uint256"",
-				""name"": ""_electionId"",
-				""type"": ""uint256""
-			}
-		],
-		""name"": ""getElectionResults"",
-		""outputs"": [
-			{
-				""internalType"": ""uint256[]"",
-				""name"": """",
-				""type"": ""uint256[]""
-			},
-			{
-				""internalType"": ""uint256[]"",
-				""name"": """",
-				""type"": ""uint256[]""
-			}
-		],
-		""stateMutability"": ""view"",
-		""type"": ""function""
-	},
-	{
-		""inputs"": [
-			{
-				""internalType"": ""uint256"",
-				""name"": """",
-				""type"": ""uint256""
-			}
-		],
-		""name"": ""votes"",
-		""outputs"": [
-			{
-				""internalType"": ""address"",
-				""name"": ""userAddress"",
-				""type"": ""address""
-			},
-			{
-				""internalType"": ""uint256"",
-				""name"": ""electionId"",
-				""type"": ""uint256""
-			},
-			{
-				""internalType"": ""string"",
-				""name"": ""electionName"",
-				""type"": ""string""
-			},
-			{
-				""internalType"": ""uint256"",
-				""name"": ""candidateId"",
-				""type"": ""uint256""
-			},
-			{
-				""internalType"": ""string"",
-				""name"": ""candidateName"",
-				""type"": ""string""
-			}
-		],
-		""stateMutability"": ""view"",
-		""type"": ""function""
-	}
-]";
+            string contractAddress = SmartConractConfig.ContractAddress;
+            string contractAbi = SmartConractConfig.ContractAbi;
 
             // Create contract instance
             var contract = web3.Eth.GetContract(contractAbi, contractAddress);
@@ -208,29 +92,36 @@ namespace Services
 
             // Query election results
             var getElectionResultsFunction = contract.GetFunction("getElectionResults");
-            var electionResults = await getElectionResultsFunction.CallDeserializingToObjectAsync<(uint[], uint[])>(electionIdToQuery);
+            ElectionResultsDTO electionResults = await getElectionResultsFunction.CallDeserializingToObjectAsync<ElectionResultsDTO>(electionIdToQuery);
 
-            var candidateIds = electionResults.Item1.ToList();
-            var voteCounts = electionResults.Item2;
+			var candidateIds = electionResults.CandidateIds;
+			var voteCounts = electionResults.VoteCounts;
 			Election? election = _electionRepository.GetElectionById(id, false);
-			if(election == null)
+			if (election == null)
 			{
 				return null;
 			}
 
-			List<Candidate> candidates = new List<Candidate>();	
-            
-			for(int i = 0; i < election.Candidates.Count; i++) 
-			{
-				var candidate = election.Candidates[i];	
-				if(candidateIds.Contains((uint)candidate.Id))
+			List<Candidate> candidates = new List<Candidate>();
+            int idCount = 0;
+            for (int i = 0; i < election.Candidates.Count; i++)
+			{				
+				var candidate = election.Candidates[i];
+				if (candidateIds.Contains((uint)candidate.Id))
 				{
-					candidate.VoteCount = (int)voteCounts[i];
+					candidate.VoteCount = (int)voteCounts[idCount++];
+                    candidate.VotePercent = (float)(candidate.VoteCount * 1.0) / voteCounts.Sum(x => (int)x) * 100;
+					candidates.Add(candidate);
+				}
+				else
+				{
+					candidate.VoteCount = 0;
 					candidates.Add(candidate);
 				}
 			}
 
 			return new ElectionResultVM { ElectionName = election.Title, Candidates = candidates };
-        }
+		}
     }
+	
 }

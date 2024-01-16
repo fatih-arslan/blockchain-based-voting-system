@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.CommonUtilities
+namespace Services.Utilities
 {
     public class FileHelper
     {

@@ -1,7 +1,7 @@
 ﻿using DataAccess.Repositories;
 using DataAccess.Repositories.Contracts;
 using Entities.Models;
-using Services.CommonUtilities;
+using Services.Utilities;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@
             const userAddress = accounts[0];
 
             // Replace 'YOUR_CONTRACT_ADDRESS' with your actual smart contract address
-            const contractAddress = '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8';
+			const contractAddress = '0x7730dbdd9FC60Aa2a13Ed80A47817b8A90342Fe7';
 			const contractAbi = [
 				{
 					"inputs": [
@@ -47,11 +47,6 @@
 					],
 					"name": "getElectionResults",
 					"outputs": [
-						{
-							"internalType": "uint256[]",
-							"name": "",
-							"type": "uint256[]"
-						},
 						{
 							"internalType": "uint256[]",
 							"name": "",

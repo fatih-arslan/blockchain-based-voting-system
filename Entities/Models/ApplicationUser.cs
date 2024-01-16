@@ -18,7 +18,6 @@ namespace Entities.Models
 
         [Required(ErrorMessage = "Surname is a required field.")]
         public string Surname { get; set; }
-        public string? EthereumAddress { get; set; }
         public DateTime RegistrationDate { get; set; }
     }
 }

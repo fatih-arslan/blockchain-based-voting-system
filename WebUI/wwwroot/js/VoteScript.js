@@ -15,7 +15,7 @@
             const userAddress = accounts[0];
 
             // Replace 'YOUR_CONTRACT_ADDRESS' with your actual smart contract address
-			const contractAddress = '0xAD9F2cE5294dE228A712811fAAD343eCaB4D8Dda';
+			const contractAddress = '0xCBF182146C06955Dd6CC0D82c3A76DF22f56e788';
 			const contractAbi = [
 				{
 					"inputs": [

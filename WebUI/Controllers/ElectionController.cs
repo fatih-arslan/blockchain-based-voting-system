@@ -92,7 +92,7 @@ namespace WebUI.Controllers
             return View(election);
         }
 
-        public async Task<IActionResult> GetResults(int id)
+        public async Task<IActionResult> Results(int id)
         {
             ElectionResultVM result = await _electionService.GetElectionResult(id);
             return View(result);

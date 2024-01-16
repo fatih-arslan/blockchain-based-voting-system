@@ -23,7 +23,7 @@
                             <div style="width: 5px;"></div>                            
                             @if (User.Identity.IsAuthenticated && (User.IsInRole(UserRoles.Admin) || User.IsInRole(UserRoles.Voter)))
                             {
-                                <a asp-controller="Election" asp-action="GetResults" asp-route-id="@election.Id" class="btn btn-outline-primary">See results</a>
+                                <a asp-controller="Election" asp-action="Results" asp-route-id="@election.Id" class="btn btn-outline-primary">See results</a>
                             }
                         </div>
                         @if (User.Identity.IsAuthenticated && User.IsInRole(UserRoles.Voter))
