@@ -4,6 +4,7 @@ using Entities.Models;
 using Entities.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebUI.Controllers
 {
@@ -41,6 +42,9 @@ namespace WebUI.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                     if(result.Succeeded)
                     {
+                        user = await _userManager.Users
+                    .Include(u => u.Votes)
+                    .FirstOrDefaultAsync(u => u.Id == user.Id);
                         return RedirectToAction("Index", "Home");
                     }
                 }

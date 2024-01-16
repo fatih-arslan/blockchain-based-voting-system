@@ -2,7 +2,9 @@
 using Entities.Models;
 using Entities.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Services.Contracts;
 
 namespace WebUI.Controllers
@@ -10,10 +12,12 @@ namespace WebUI.Controllers
     public class ElectionController : Controller
     {
         private readonly IElectionService _electionService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ElectionController(IElectionService electionService)
+        public ElectionController(IElectionService electionService, UserManager<ApplicationUser> userManager)
         {
             _electionService = electionService;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -82,14 +86,18 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = UserRoles.Voter)]
-        public IActionResult Vote(int id)
+        public async Task<IActionResult> Vote(int id)
         {
             Election? election = _electionService.GetElectionById(id, false);
+            ApplicationUser currentUser =  await _userManager.GetUserAsync(User);
+            currentUser = _userManager.Users.Include(u => u.Votes).FirstOrDefault(u => u.Id == currentUser.Id);
+            bool alreadyVoted = currentUser.Votes.Any(vo => vo.ElectionId == id);
+            VoteVM voteVM = new VoteVM { UserAlreadyVoted = alreadyVoted, Election = election };
             if (election == null)
             {
                 return View("NotFound", new NotFoundVM("Election"));
             }
-            return View(election);
+            return View(voteVM);
         }
 
         public async Task<IActionResult> Results(int id)

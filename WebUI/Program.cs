@@ -20,6 +20,7 @@ builder.Services.AddScoped<IElectionRepository, ElectionRepository>();
 builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<IElectionService, ElectionService>();   
 builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IVoteRepository, VoteRepository>();
 
 builder.Services.AddIdentity<ApplicationUser , IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

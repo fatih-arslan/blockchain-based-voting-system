@@ -20,5 +20,6 @@ namespace DataAccess.Data
 
         public DbSet<Election> Elections { get; set; }
         public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Vote> Votes { get; set; }
     }
 }

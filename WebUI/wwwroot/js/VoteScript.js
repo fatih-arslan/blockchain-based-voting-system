@@ -1,10 +1,6 @@
-﻿async function voteForCandidate(electionId, electionName, candidateId, candidateName) {
-	console.log(electionId)
-	console.log(electionName)
-	console.log(candidateId)
-	console.log(candidateName)
+﻿async function voteForCandidate(electionId, electionName, candidateId, candidateName, userId) {
     try {
-        // Check MetaMask availability
+         //Check MetaMask availability
         if (window.ethereum) {
             var web3 = new Web3(window.ethereum);
             // Request user permission to interact with their MetaMask account
@@ -146,10 +142,30 @@
             });
 
             console.log('Vote transaction hash:', result.transactionHash);
-            console.log(`View your vote on Etherscan: https://etherscan.io/tx/${result.transactionHash}`);
+			console.log(`View your vote on Etherscan: https://etherscan.io/tx/${result.transactionHash}`);
+
+			
         } else {
             console.error('MetaMask not detected. Please install MetaMask and connect to your Ethereum account.');
-        }
+		}
+
+
+		// After the transaction is successful, send a POST request to your ASP.NET Core endpoint
+		await fetch('/Vote/AddVote', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				// Provide the necessary vote details
+				electionId: electionId,
+				userId: userId,
+				voteDate: new Date().toISOString()
+			}),
+		});
+
+		window.location.href = `/Election/Vote/${electionId}`;
+
     } catch (error) {
         console.error('Error:', error);
     }
