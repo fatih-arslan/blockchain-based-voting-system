@@ -10,72 +10,79 @@
 
 <!-- Include Web3.js library -->
 <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+<div style="height:150px;"></div>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h2 class="mb-4">Vote for Your Preferred Candidate</h2>
+<div class="container">
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="mb-4">Vote for Your Preferred Candidate</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var candidate in election.Candidates)
+            {
+                <div class="col-lg-3 col-sm-6 mb-4">
+                    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                        <img src="@candidate.ImagePath" class="card-img-top rounded" alt="Candidate Image" />
+                        <div class="card-body">
+                            <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
+                                <h5 class="card-title text-dark opacity-75 text-uppercase text-center mb-2">@candidate.Name @candidate.Surname</h5>
+                            </a>
+                            <div class="d-flex justify-content-center">
+                                @if (alreadyVoted)
+                                {
+                                    <button type="button" class="btn btn-success" disabled>Voted</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal-@candidate.Id">Vote for the Candidate</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bootstrap Modal for Confirmation -->
+                <div class="modal fade" id="confirmationModal-@candidate.Id" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">Confirm Vote</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to vote for this candidate?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <!-- Updated Vote button to trigger the Web3.js script -->
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="voteForCandidate('@election.Id', '@election.Title', '@candidate.Id', '@candidate.Name', '@userId')">Vote</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 
-    <div class="row">
-        @foreach (var candidate in election.Candidates)
-        {
-            <div class="col-lg-3 col-sm-6 mb-4">
-                <div class="card border-0 p-3 shadow border-top border-5 rounded">
-                    <img src="@candidate.ImagePath" class="card-img-top rounded" alt="Candidate Image" />
-                    <div class="card-body">
-                        <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
-                            <h5 class="card-title text-dark opacity-75 text-uppercase text-center mb-2">@candidate.Name @candidate.Surname</h5>
-                        </a>
-                        <div class="d-flex justify-content-center">
-                            @if(alreadyVoted)
-                            {
-                                <button type="button" class="btn btn-success" disabled>Voted</button>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal-@candidate.Id">Vote for the Candidate</button>
-                            }
-                        </div>
-                    </div>
+    <div class="col-md-12 mt-4">
+        <div class="card-footer">
+            <p class="card-text">
+                <div class="mb-3" style="margin-top:10px;">
+                    <a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
                 </div>
-            </div>
-            <!-- Bootstrap Modal for Confirmation -->
-            <div class="modal fade" id="confirmationModal-@candidate.Id" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmationModalLabel">Confirm Vote</h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to vote for this candidate?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <!-- Updated Vote button to trigger the Web3.js script -->
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="voteForCandidate('@election.Id', '@election.Title', '@candidate.Id', '@candidate.Name', '@userId')">Vote</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+            </p>
+        </div>
     </div>
+
 </div>
 
-<div class="col-md-12 mt-4">
-    <div class="card-footer">
-        <p class="card-text">
-            <div class="mb-3" style="margin-top:10px;">
-                <a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
-            </div>
-        </p>
-    </div>
-</div>
 
-<div style="height: 50px"></div>
+
+<div style="height: 150px"></div>
 
 <script src="~/js/VoteScript.js"></script>

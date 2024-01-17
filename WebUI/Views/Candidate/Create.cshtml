@@ -4,10 +4,12 @@
 @{
     ViewData["Title"] = "Add Candidate";
 }
+<div style="height:150px;"></div>
+<div class="container">
 
-<h2>@ViewData["Title"]</h2>
+    <h2>@ViewData["Title"]</h2>
 
-<div class="row"
+    <div class="row"
 
     <div class="row">
         <div class="col-md-6">
@@ -36,7 +38,7 @@
                             <input asp-for="ImageFile" class="form-control" id="ImageFile"/>
                             <span asp-validation-for="ImageFile" class="text-danger"></span>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label asp-for="Description" class="form-label"></label>
@@ -53,6 +55,10 @@
         </div>
     </div>
 </div>
+
+</div>
+<div style="height:150px;"></div>
+
 @section Scripts{
     <script>
         // Function to preview the selected image

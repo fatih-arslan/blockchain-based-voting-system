@@ -4,7 +4,96 @@
     var userName = String.IsNullOrEmpty(User.Identity.Name) ? "guest" : User.Identity.Name;
 }
 
-<div class="text-center">    
-    <h1 class="display-4">Welcome @userName</h1>   
-    <a class="btn btn-primary" asp-controller="Election">Elections</a>    
+<div>    
+@*    <a class="btn btn-primary" asp-controller="Election" asp-action="Index">Elections</a>    *@
+    
+    <header class="masthead" style="background-image:url('images/header-bg.jpg');">
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in"><span>Welcome To BlockVote!</span></div>
+                <div class="intro-heading text-uppercase"><span>It's Nice To See an Aware Citizen</span></div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="text-uppercase">Instructions</h2>
+                    <h3 class="text-muted section-subheading">Let's have a look at the voting process here.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-group timeline">
+                        <li class="list-group-item">
+                            <div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/manual-voting.png"></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>What is BlockVote?</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+                                        BlockVote is a revolutionary blockchain-based e-voting system designed to ensure the security, transparency, and integrity of election votes. 
+                                        By leveraging the Ethereum blockchain, BlockVote provides a decentralized and tamper-resistant platform, offering users a trustworthy and verifiable voting experience.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item timeline-inverted">
+                            <div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/online-registration.png"></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>How to Vote</h4>
+                                    <h5 class="subheading">Metamask Installation</h5>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+                                        Visit the MetaMask website: Go to MetaMask's official <a href="https://metamask.io/">website</a> to download the extension.                                                                                
+                                    </p>
+                                    <p class="text-muted">
+                                        Download MetaMask: Follow the instructions on the website to download and install the MetaMask extension for your preferred web browser (e.g., Chrome, Firefox).
+                                    </p>
+                                    <p class="text-muted">
+                                        Create an Account: Open MetaMask and create a new account. Remember to secure your account with a strong password and store your seed phrase in a safe place.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/online-voting.png"></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>Register to BlockVote</h4>
+                                    <h4 class="subheading">Vote Online!</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+                                        Visit BlockVote and register with your identification number and password.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item timeline-inverted">
+                            <div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/positive-vote.png"></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>Cast Your Vote</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">Once you have installed metamask extension and registered to BlockVote you can navigate to voting section and cast your vote.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item timeline-inverted">
+                            <div class="timeline-image">
+                                <h4>Be a good<br>&nbsp;Citizen<br>&nbsp;VOTE!</h4>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

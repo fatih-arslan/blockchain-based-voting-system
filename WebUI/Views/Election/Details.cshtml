@@ -3,64 +3,70 @@
 @{
     ViewData["Title"] = "Election Details";
 }
-
-<h2>@ViewData["Title"]</h2>
-
+<div style="height:150px;"></div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <img src="@Model.ImagePath" class="card-img-top" alt="Election Image">                
-            </div> 
-        </div>   
-        
-        <div class="col-md-6">
-            <div class="card-body">
-                <h5 class="card-title">@Model.Title</h5>
-                <p class="card-text">@Model.Description</p>
-                <p class="card-text">Start Date: @Model.StartDate.ToString("MMMM dd, yyyy")</p>
-                <p class="card-text">End Date: @Model.EndDate.ToString("MMMM dd, yyyy")</p>
+
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="@Model.ImagePath" class="card-img-top" alt="Election Image">
+                </div>
             </div>
 
-            <!-- Display Candidates -->
-            @if (Model.Candidates.Any())
-            {
-                <h3 class="mt-4">Candidates:</h3>
-                <div class="row">
-                    @foreach (var candidate in Model.Candidates)
-                    {
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <img src="@candidate.ImagePath" class="card-img-top" height="200" width="50" alt="Candidate Image">
-                                <div class="card-body">
-                                    <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
-                                        <h5 class="card-title">
-                                            @candidate.Name @candidate.Surname 
-                                        </h5>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <p class="card-text">@Model.Description</p>
+                    <p class="card-text">Start Date: @Model.StartDate.ToString("MMMM dd, yyyy")</p>
+                    <p class="card-text">End Date: @Model.EndDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+
+                <!-- Display Candidates -->
+                @if (Model.Candidates.Any())
+                {
+                    <h3 class="mt-4">Candidates:</h3>
+                    <div class="row">
+                        @foreach (var candidate in Model.Candidates)
+                        {
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <img src="@candidate.ImagePath" class="card-img-top" height="200" width="50" alt="Candidate Image">
+                                    <div class="card-body">
+                                        <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
+                                            <h5 class="card-title">
+                                                @candidate.Name @candidate.Surname
+                                            </h5>
                                         </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p>No candidates available.</p>
-            }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>No candidates available.</p>
+                }
 
-        </div>
-        <div class="col-md-12">
-            <div class="card-footer ">
-                <p class="card-text">
-                    <a class="btn btn-outline-primary" asp-action="Index">
-                        Back to list
-                    </a>                    
-                </p>
+            </div>
+            <div class="col-md-12">
+                <div class="card-footer ">
+                    <p class="card-text">
+                        <a class="btn btn-outline-primary" asp-action="Index">
+                            Back to list
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>       
+    </div>
+
+
 </div>
 
+<div style="height:150px;"></div>
 
 

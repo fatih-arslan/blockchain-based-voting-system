@@ -4,10 +4,12 @@
 @{
     ViewData["Title"] = "Edit Candidate";
 }
+<div style="height:150px;"></div>
+<div class="container">
 
-<h2>@ViewData["Title"]</h2>
+    <h2>@ViewData["Title"]</h2>
 
-<div class="row"
+    <div class="row"
 
     <div class="row">
         <div class="col-md-6">
@@ -15,7 +17,7 @@
                 <img src="@Model.ImagePath" width="75%" id="ImageURLPreview" />
             </div>
             <form asp-action="Edit" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly"></div>                
+                <div asp-validation-summary="ModelOnly"></div>
                 <div class="row">
                     <div class="col-md-6">
                         <input asp-for="Id" hidden />
@@ -53,6 +55,11 @@
         </div>
     </div>
 </div>
+
+</div>
+
+<div style="height:150px;"></div>
+
 @section Scripts{
     <script>
         // Function to preview the selected image
