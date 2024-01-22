@@ -21,7 +21,7 @@ namespace Services
             _candidateRepository = candidateRepository;
         }
 
-        public void AddCandidate(Candidate candidate)
+        public async Task AddCandidateAsync(Candidate candidate)
         {
             string fileName = FileHelper.DefaultCandidateFileName;
             if(candidate.ImageFile != null)
@@ -29,30 +29,30 @@ namespace Services
                 fileName = FileHelper.SaveImage(candidate.ImageFile);
             }
             candidate.ImagePath = $"/images/{fileName}";
-            _candidateRepository.AddCandidate(candidate);
+            await _candidateRepository.AddCandidateAsync(candidate);
         }
 
-        public IEnumerable<Candidate> GetAllCandidates(bool trackChanges)
+        public async Task<IEnumerable<Candidate>> GetAllCandidatesAsync(bool trackChanges)
         {
-            return _candidateRepository.GetAllCandidates(trackChanges);
+            return await _candidateRepository.GetAllCandidatesAsync(trackChanges);
         }
 
-        public Candidate? GetCandidateById(int id, bool trackChanges)
+        public async Task<Candidate?> GetCandidateByIdAsync(int id, bool trackChanges)
         {
-            return _candidateRepository.GetCandidateById(id, trackChanges);
+            return await _candidateRepository.GetCandidateByIdAsync(id, trackChanges);
         }
 
-        public void RemoveCandidate(Candidate candidate)
+        public async Task RemoveCandidateAsync(Candidate candidate)
         {
             string? filePath = candidate.ImagePath;
             if (filePath != null && filePath != FileHelper.DefaultCandidateFilePath)
             {
                 FileHelper.DeleteImage(filePath);
             }
-            _candidateRepository.RemoveCandidate(candidate);
+            await _candidateRepository.RemoveCandidateAsync(candidate);
         }
 
-        public void UpdateCandidate(Candidate candidate)
+        public async Task UpdateCandidateAsync(Candidate candidate)
         {
             if(candidate.ImageFile != null)
             {
@@ -64,7 +64,7 @@ namespace Services
                 string fileName = FileHelper.SaveImage(candidate.ImageFile);
                 candidate.ImagePath = $"/images/{fileName}";
             }
-            _candidateRepository.UpdateCandidate(candidate);
+            await _candidateRepository.UpdateCandidateAsync(candidate);
         }
     }
 }

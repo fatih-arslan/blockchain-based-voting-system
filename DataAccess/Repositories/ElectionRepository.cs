@@ -15,29 +15,29 @@ namespace DataAccess.Repositories
         {
             
         }
-        public void AddElection(Election election)
+        public async Task AddElectionAsync(Election election)
         {
-            Add(election);
+            await AddAsync(election);
         }
 
-        public IEnumerable<Election> GetAllElections(bool trackChanges)
+        public async Task<IEnumerable<Election>> GetAllElectionsAsync(bool trackChanges)
         {
-            return GetAll(trackChanges);
+            return await GetAllAsync(trackChanges);
         }
 
-        public Election? GetElectionById(int id, bool trackChanges)
+        public async Task<Election?> GetElectionByIdAsync(int id, bool trackChanges)
         {
-            return GetByCondition(e => e.Id == id, trackChanges, includeProperties:"Candidates");
+            return await GetByConditionAsync(e => e.Id == id, trackChanges, includeProperties:"Candidates");
         }
 
-        public void RemoveElection(Election election)
+        public async Task RemoveElectionAsync(Election election)
         {
-            Remove(election);   
+            await RemoveAsync(election);   
         }
 
-        public void UpdateElection(Election election)
+        public async Task UpdateElectionAsync(Election election)
         {
-            Update(election);
+            await UpdateAsync(election);
         }
     }
 }

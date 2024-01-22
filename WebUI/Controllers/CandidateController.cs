@@ -25,20 +25,20 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Candidate candidate)
+        public async Task<IActionResult> Create(Candidate candidate)
         {
             if (ModelState.IsValid)
             {
-                _candidateService.AddCandidate(candidate);
+                await _candidateService.AddCandidateAsync(candidate);
                 return RedirectToAction("Edit", "Election", new {id = candidate.ElectionId});
             }     
             
             return View();
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            Candidate? candidate = await _candidateService.GetCandidateByIdAsync(id, false);
             if(candidate == null)
             {
                 return View("NotFound", new NotFoundVM("Candidate"));
@@ -47,9 +47,9 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = UserRoles.Admin)]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Candidate? candidate = _candidateService.GetCandidateById(id, false);
+            Candidate? candidate = await _candidateService.GetCandidateByIdAsync(id, false);
             if (candidate == null)
             {
                 return View("NotFound", new NotFoundVM("Candidate"));
@@ -59,11 +59,11 @@ namespace WebUI.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(Candidate newCandidate) 
+        public async Task<IActionResult> Edit(Candidate newCandidate) 
         {
             if (ModelState.IsValid)
             {
-                _candidateService.UpdateCandidate(newCandidate);
+                await _candidateService.UpdateCandidateAsync(newCandidate);
                 return RedirectToAction("Edit", "Election", new { id = newCandidate.ElectionId });
 
             }            
@@ -71,13 +71,13 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = UserRoles.Admin)]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            Candidate? candidate = _candidateService.GetCandidateById(id, true);            
+            Candidate? candidate = await _candidateService.GetCandidateByIdAsync(id, true);            
             if(candidate != null)
             {
                 int electionId = candidate.ElectionId;
-                _candidateService.RemoveCandidate(candidate);
+                await _candidateService.RemoveCandidateAsync(candidate);
 				return RedirectToAction("Edit", "Election", new { id = electionId });
 			}
             return View("NotFound", new NotFoundVM("Candidate"));

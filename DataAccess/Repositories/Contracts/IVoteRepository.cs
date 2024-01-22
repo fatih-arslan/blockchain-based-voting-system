@@ -9,6 +9,6 @@ namespace DataAccess.Repositories.Contracts
 {
     public interface IVoteRepository
     {
-        void AddVote(Vote vote);
+        Task AddVoteAsync(Vote vote);
     }
 }

@@ -20,9 +20,9 @@ namespace WebUI.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var elections = _electionService.GetAllElections(false);            
+            var elections = await _electionService.GetAllElectionsAsync(false);            
             return View(elections);
         }
 
@@ -33,19 +33,19 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Election election)
+        public async Task<IActionResult> Create(Election election)
         {
             if(ModelState.IsValid)
             {                
-                _electionService.AddElection(election);
+                await _electionService.AddElectionAsync(election);
                 return RedirectToAction("Index");
             }            
             return View(election);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Election? election = _electionService.GetElectionById(id, false);
+            Election? election = await _electionService.GetElectionByIdAsync(id, false);
             if(election == null)
             {
                 return View("NotFound", new NotFoundVM("Election"));
@@ -54,9 +54,9 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = UserRoles.Admin)]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Election? election = _electionService.GetElectionById(id, true);
+            Election? election = await _electionService.GetElectionByIdAsync(id, true);
             if (election == null)
             {
                 return View("NotFound", new NotFoundVM("Election"));
@@ -65,22 +65,22 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Election newElection)
+        public async Task<IActionResult> Edit(Election newElection)
         {
             if(ModelState.IsValid)
             {
-                _electionService.UpdateElection(newElection);
+                await _electionService.UpdateElectionAsync(newElection);
                 return RedirectToAction("Index");
             }            
             return View(newElection);
         }       
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            Election? election = _electionService.GetElectionById(id, true);
+            Election? election = await _electionService.GetElectionByIdAsync(id, true);
             if(election != null)
             {
-                _electionService.RemoveElection(election);
+                await _electionService.RemoveElectionAsync(election);
             }
             return RedirectToAction("Index");
         }
@@ -88,7 +88,7 @@ namespace WebUI.Controllers
         [Authorize(Roles = UserRoles.Voter)]
         public async Task<IActionResult> Vote(int id)
         {
-            Election? election = _electionService.GetElectionById(id, false);
+            Election? election = await _electionService.GetElectionByIdAsync(id, false);
             ApplicationUser currentUser =  await _userManager.GetUserAsync(User);
             currentUser = _userManager.Users.Include(u => u.Votes).FirstOrDefault(u => u.Id == currentUser.Id);
             bool alreadyVoted = currentUser.Votes.Any(vo => vo.ElectionId == id);
@@ -102,7 +102,7 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Results(int id)
         {
-            ElectionResultVM result = await _electionService.GetElectionResult(id);
+            ElectionResultVM result = await _electionService.GetElectionResultAsync(id);
             return View(result);
         }
     }

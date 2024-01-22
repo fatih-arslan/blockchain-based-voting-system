@@ -29,7 +29,7 @@ namespace Services
             _electionRepository = electionRepository;
         }
 
-        public void AddElection(Election election)
+        public async Task AddElectionAsync(Election election)
         {
             string fileName = FileHelper.DefaultElectionFileName;
             if(election.ImageFile != null)
@@ -38,30 +38,37 @@ namespace Services
 
             }
             election.ImagePath = $"/images/{fileName}";
-            _electionRepository.AddElection(election);
+            await _electionRepository.AddElectionAsync(election);
         }
 
-        public IEnumerable<Election> GetAllElections(bool trackChanges)
+        public async Task<IEnumerable<Election>> GetAllElectionsAsync(bool trackChanges)
         {
-            return _electionRepository.GetAllElections(trackChanges).OrderBy(e => e.Id).ToList();
+            return await _electionRepository.GetAllElectionsAsync(trackChanges);
         }
 
-        public Election? GetElectionById(int id, bool trackChanges)
+        public async Task<Election?> GetElectionByIdAsync(int id, bool trackChanges)
         {
-            return _electionRepository.GetElectionById(id, trackChanges);
+            return await _electionRepository.GetElectionByIdAsync(id, trackChanges);
         }
 
-        public void RemoveElection(Election election)
+        public async Task RemoveElectionAsync(Election election)
         {
             string? filePath = election.ImagePath;
             if(filePath != null && filePath != FileHelper.DefaultElectionFilePath) 
             {
 				FileHelper.DeleteImage(filePath);
 			}
-            _electionRepository.RemoveElection(election);
+            foreach(Candidate c in election.Candidates)
+            {
+                if(c.ImagePath != null)
+                {
+                    FileHelper.DeleteImage(c.ImagePath);
+                }
+            }
+            await _electionRepository.RemoveElectionAsync(election);
         }
 
-        public void UpdateElection(Election election)
+        public async Task UpdateElectionAsync(Election election)
         {
             if(election.ImageFile != null)
             {
@@ -73,30 +80,27 @@ namespace Services
                 string fileName = FileHelper.SaveImage(election.ImageFile);
                 election.ImagePath = $"/images/{fileName}";
             }
-            _electionRepository.UpdateElection(election);
+            await _electionRepository.UpdateElectionAsync(election);
         }
 
-        public async Task<ElectionResultVM> GetElectionResult(int id)
+        public async Task<ElectionResultVM> GetElectionResultAsync(int id)
         {
-            // Ethereum web3 instance using MetaMask's injected Web3
-            var web3 = new Web3("https://sepolia.infura.io/v3/51bd736f18d645e7b4832e8803d5a257");
+            string apiKey = APIKeys.InfuraSepoliaAPI;
+            var web3 = new Web3($"https://sepolia.infura.io/v3/{apiKey}");
 
             string contractAddress = SmartConractConfig.ContractAddress;
             string contractAbi = SmartConractConfig.ContractAbi;
 
-            // Create contract instance
             var contract = web3.Eth.GetContract(contractAbi, contractAddress);
 
-            // Replace with the electionId you want to query
             uint electionIdToQuery = (uint)id;
 
-            // Query election results
             var getElectionResultsFunction = contract.GetFunction("getElectionResults");
             ElectionResultsDTO electionResults = await getElectionResultsFunction.CallDeserializingToObjectAsync<ElectionResultsDTO>(electionIdToQuery);
 
 			var candidateIds = electionResults.CandidateIds;
 			var voteCounts = electionResults.VoteCounts;
-			Election? election = _electionRepository.GetElectionById(id, false);
+			Election? election = await _electionRepository.GetElectionByIdAsync(id, false);
 			if (election == null)
 			{
 				return null;

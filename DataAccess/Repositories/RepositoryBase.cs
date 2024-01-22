@@ -21,13 +21,13 @@ namespace DataAccess.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public void Add(T entity)
+        public async Task AddAsync(T entity)
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll(bool trackChanges, string? includeProperties = null, Expression<Func<T, bool>>? filter = null)
+        public async Task<IEnumerable<T>> GetAllAsync(bool trackChanges, string? includeProperties = null, Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = _dbSet;
             if(filter != null)
@@ -41,10 +41,11 @@ namespace DataAccess.Repositories
                     query = query.Include(property);
                 }
             }
-            return trackChanges ? query.ToList() : query.AsNoTracking().ToList();
+            query = trackChanges ? query : query.AsNoTracking();
+            return await query.ToListAsync();
         }
 
-        public T? GetByCondition(Expression<Func<T, bool>> condition, bool trackChanges, string? includeProperties = null)
+        public async Task<T?> GetByConditionAsync(Expression<Func<T, bool>> condition, bool trackChanges, string? includeProperties = null)
         {
             IQueryable<T> query = trackChanges ? _dbSet : _dbSet.AsNoTracking();
             query = query.Where(condition);
@@ -55,21 +56,21 @@ namespace DataAccess.Repositories
                     query = query.Include(property);
                 }
             }            
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public void Remove(T entity)
+        public async Task RemoveAsync(T entity)
         {
-            _dbSet.Remove(entity);
-            _context.SaveChanges();
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
 
         }
 
-        public void Update(T entityToUpdate)
+        public async Task UpdateAsync(T entityToUpdate)
         {
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

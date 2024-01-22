@@ -14,9 +14,9 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddVote([FromBody] Vote vote)
+        public async Task<IActionResult> AddVote([FromBody] Vote vote)
         {
-            _voteRepository.AddVote(vote);
+            await _voteRepository.AddVoteAsync(vote);
             return Ok(); 
         }
     }

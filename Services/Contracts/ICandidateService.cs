@@ -9,10 +9,10 @@ namespace Services.Contracts
 {
     public interface ICandidateService
     {
-        void AddCandidate(Candidate candidate);
-        Candidate? GetCandidateById(int id, bool trackChanges);
-        IEnumerable<Candidate> GetAllCandidates(bool trackChanges);
-        void UpdateCandidate(Candidate candidate);
-        void RemoveCandidate(Candidate candidate);
+        Task AddCandidateAsync(Candidate candidate);
+        Task<Candidate?> GetCandidateByIdAsync(int id, bool trackChanges);
+        Task<IEnumerable<Candidate>> GetAllCandidatesAsync(bool trackChanges);
+        Task UpdateCandidateAsync(Candidate candidate);
+        Task RemoveCandidateAsync(Candidate candidate);
     }
 }

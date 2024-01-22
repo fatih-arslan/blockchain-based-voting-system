@@ -9,10 +9,10 @@ namespace DataAccess.Repositories.Contracts
 {
     public interface ICandidateRepository
     {
-        void AddCandidate(Candidate candidate);
-        IEnumerable<Candidate> GetAllCandidates(bool trackChanges);
-        Candidate? GetCandidateById(int id, bool trackChanges); 
-        void UpdateCandidate(Candidate candidate);
-        void RemoveCandidate(Candidate candidate);
+        Task AddCandidateAsync(Candidate candidate);
+        Task<IEnumerable<Candidate>> GetAllCandidatesAsync(bool trackChanges);
+        Task<Candidate?> GetCandidateByIdAsync(int id, bool trackChanges);
+        Task UpdateCandidateAsync(Candidate candidate);
+        Task RemoveCandidateAsync(Candidate candidate);
     }
 }

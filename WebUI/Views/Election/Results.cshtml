@@ -19,11 +19,11 @@
                 <div class="col-lg-3 col-sm-6 mb-4">
                     <div class="card border-0 p-3 shadow border-top border-5 rounded">
                         <img src="@candidate.ImagePath" class="card-img-top rounded" alt="Candidate Image" />
-                        <div class="card-body">
+                        <div class="card-body text-center">
                             <a asp-controller="Candidate" asp-action="Details" asp-route-id="@candidate.Id">
                                 <h5 class="card-title text-dark opacity-75 text-uppercase text-center mb-2">@candidate.Name @candidate.Surname</h5>
                             </a>
-                            <p>% @candidate.VotePercent</p>
+                            <p style="background-color=yellow;"> <span class="badge badge-primary w-100" style="font-size=617px;">% @candidate.VotePercent</span> </p>
                         </div>
                     </div>
                 </div>

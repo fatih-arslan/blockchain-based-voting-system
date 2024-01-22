@@ -15,9 +15,9 @@ namespace DataAccess.Repositories
         {
                     
         }
-        public void AddVote(Vote vote)
+        public async Task AddVoteAsync(Vote vote)
         {
-            Add(vote);
+            await AddAsync(vote);
         }
     }
 }

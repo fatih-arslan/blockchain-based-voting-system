@@ -10,12 +10,12 @@ namespace Services.Contracts
 {
     public interface IElectionService
     {
-        void AddElection(Election election);
-        Election? GetElectionById(int id, bool trackChanges);
-        IEnumerable<Election> GetAllElections(bool trackChanges);
-        void UpdateElection(Election election);
-        void RemoveElection(Election election);
-        Task<ElectionResultVM> GetElectionResult(int id);
+        Task AddElectionAsync(Election election);
+        Task<Election?> GetElectionByIdAsync(int id, bool trackChanges);
+        Task<IEnumerable<Election>> GetAllElectionsAsync(bool trackChanges);
+        Task UpdateElectionAsync(Election election);
+        Task RemoveElectionAsync(Election election);
+        Task<ElectionResultVM> GetElectionResultAsync(int id);
 
     }
 }

@@ -10,11 +10,11 @@ namespace DataAccess.Repositories.Contracts
 {
     public interface IElectionRepository : IRepositoryBase<Election>
     {
-        void AddElection(Election election);
-        IEnumerable<Election> GetAllElections(bool trackChanges);
-        Election? GetElectionById(int id, bool trackChanges);
-        void UpdateElection(Election election);
-        void RemoveElection(Election election);
+        Task AddElectionAsync(Election election);
+        Task<IEnumerable<Election>> GetAllElectionsAsync(bool trackChanges);
+        Task<Election?> GetElectionByIdAsync(int id, bool trackChanges);
+        Task UpdateElectionAsync(Election election);
+        Task RemoveElectionAsync(Election election);
 
     }
 }

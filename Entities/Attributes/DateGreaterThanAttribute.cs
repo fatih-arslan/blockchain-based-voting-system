@@ -19,19 +19,10 @@ namespace Entities.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {            
-            DateTime earlierDate = (DateTime)value;
-            DateTime laterDate;
+            DateTime laterDate = (DateTime)value;
+            DateTime earlierDate = (DateTime)validationContext.ObjectType.GetProperty(DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null);       
 
-            if(DateTime.TryParse(DateToCompareToFieldName, out DateTime parsedDate))
-            {
-                laterDate = parsedDate;
-            }
-            else
-            {
-                laterDate = (DateTime)validationContext.ObjectType.GetProperty(DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null);
-            }
-
-            if (laterDate > earlierDate)
+            if (laterDate >= earlierDate)
             {
                 return ValidationResult.Success;
             }
