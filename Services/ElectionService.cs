@@ -50,6 +50,11 @@ namespace Services
         {
             return await _electionRepository.GetElectionByIdAsync(id, trackChanges);
         }
+        
+        public async Task<IEnumerable<Election>> GetAvailableElectionsAsync(bool trackChanges)
+        {
+            return await _electionRepository.GetAvailableElectionsAsync(trackChanges);
+        }
 
         public async Task RemoveElectionAsync(Election election)
         {
@@ -60,7 +65,7 @@ namespace Services
 			}
             foreach(Candidate c in election.Candidates)
             {
-                if(c.ImagePath != null)
+                if(c.ImagePath != null && c.ImagePath != FileHelper.DefaultCandidateFilePath)
                 {
                     FileHelper.DeleteImage(c.ImagePath);
                 }

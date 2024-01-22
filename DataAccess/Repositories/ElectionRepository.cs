@@ -30,6 +30,12 @@ namespace DataAccess.Repositories
             return await GetByConditionAsync(e => e.Id == id, trackChanges, includeProperties:"Candidates");
         }
 
+        public async Task<IEnumerable<Election>> GetAvailableElectionsAsync(bool trackChanges)
+        {
+            var now = DateTime.Now;
+            return await GetAllByConditionAsync(e => e.StartDate <= now, trackChanges);
+        }
+
         public async Task RemoveElectionAsync(Election election)
         {
             await RemoveAsync(election);   

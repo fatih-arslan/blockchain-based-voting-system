@@ -9,7 +9,7 @@
 
 <div class="container">
 
-    <h2>@ViewData["Title"]</h2>
+    <h2>@ViewData["Referrer"]</h2>
 
     <div class="row"
 
@@ -22,6 +22,7 @@
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="row">
                     <div class="col-md-6">
+                        <input type="hidden" name="Referer" value="@ViewData["Referer"]"/>
                         <div class="mb-3" hidden>
                             <label asp-for="ImagePath" class="form-label"></label>
                             <input asp-for="ImagePath" class="form-control" />
@@ -61,7 +62,7 @@
                 </div>
                 <div class="mb-3" style="margin-top:10px;">
                     <input type="submit" value="Add" class="btn btn-outline-success float-end" />
-                    <a class="btn btn-outline-secondary" asp-action="Index">Back to list</a>
+                    <a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
                 </div>
             </form>
         </div>

@@ -59,9 +59,25 @@ namespace DataAccess.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllByConditionAsync(Expression<Func<T, bool>> condition, bool trackChanges, string? includeProperties = null)
+        {
+            IQueryable<T> query = trackChanges ? _dbSet : _dbSet.AsNoTracking();
+            query = query.Where(condition);
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task RemoveAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
+            _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
 
         }

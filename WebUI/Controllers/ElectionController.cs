@@ -22,23 +22,30 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var elections = await _electionService.GetAllElectionsAsync(false);            
+            var elections = await _electionService.GetAvailableElectionsAsync(false);            
+            return View(elections);
+        }
+
+        public async Task<IActionResult> All()
+        {
+            var elections = await _electionService.GetAllElectionsAsync(true);
             return View(elections);
         }
 
         [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Create()
-        {
-            return View();
+        {            
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+			return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Election election)
+        public async Task<IActionResult> Create(Election election, string referer)
         {
             if(ModelState.IsValid)
             {                
                 await _electionService.AddElectionAsync(election);
-                return RedirectToAction("Index");
+                return Redirect(referer);
             }            
             return View(election);
         }
@@ -61,16 +68,17 @@ namespace WebUI.Controllers
             {
                 return View("NotFound", new NotFoundVM("Election"));
             }
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
             return View(election);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Election newElection)
+        public async Task<IActionResult> Edit(Election newElection, string referer)
         {
             if(ModelState.IsValid)
             {
                 await _electionService.UpdateElectionAsync(newElection);
-                return RedirectToAction("Index");
+                return Redirect(referer);
             }            
             return View(newElection);
         }       
@@ -82,7 +90,8 @@ namespace WebUI.Controllers
             {
                 await _electionService.RemoveElectionAsync(election);
             }
-            return RedirectToAction("Index");
+            var referringUrl = Request.Headers["Referer"].ToString();
+            return Redirect(string.IsNullOrEmpty(referringUrl) ? "/" : referringUrl);            
         }
 
         [Authorize(Roles = UserRoles.Voter)]

@@ -28,7 +28,7 @@ namespace WebUI.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = UserRoles.Voter)]
+        [Authorize(Roles = $"{UserRoles.Voter},{UserRoles.Admin}")]
         public async Task<IActionResult> Profile()
         {
             ApplicationUser? user = await _userManager.GetUserAsync(User);

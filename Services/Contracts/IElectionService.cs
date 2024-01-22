@@ -13,6 +13,7 @@ namespace Services.Contracts
         Task AddElectionAsync(Election election);
         Task<Election?> GetElectionByIdAsync(int id, bool trackChanges);
         Task<IEnumerable<Election>> GetAllElectionsAsync(bool trackChanges);
+        Task<IEnumerable<Election>> GetAvailableElectionsAsync(bool trackChanges);
         Task UpdateElectionAsync(Election election);
         Task RemoveElectionAsync(Election election);
         Task<ElectionResultVM> GetElectionResultAsync(int id);
