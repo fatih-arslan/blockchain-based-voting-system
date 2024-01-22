@@ -25,3 +25,7 @@ body {
     max-width: 200px !important;
     height: 230px !important;
 }
+
+#mainNav {
+    margin-bottom: 500px; /* Adjust the value based on your desired margin */
+}

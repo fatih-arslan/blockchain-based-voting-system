@@ -39,8 +39,9 @@ namespace DataAccess.Data
                         UserName = adminIdNumber,
                         IdentificationNumber = adminIdNumber,
                         EmailConfirmed = true,
-                        Name = "Admin1",
-                        Surname = "Admin1"
+                        FirstName = "Admin1",
+                        Lastname = "Admin1",
+                        RegistrationDate = DateTime.Now,
                     };
 
                     var result = await userManager.CreateAsync(newAdminUser, "Admin123!");
@@ -57,8 +58,9 @@ namespace DataAccess.Data
                         UserName = voterIdNumber,
                         IdentificationNumber = voterIdNumber,
                         EmailConfirmed = true,
-                        Name = "Voter1",
-                        Surname = "Voter1"
+                        FirstName = "Voter1",
+                        Lastname = "Voter1",
+                        RegistrationDate = DateTime.Now
                     };
 
                     await userManager.CreateAsync(newVoterUser, "Voter123!");

@@ -1,12 +1,10 @@
 ﻿@using DataAccess.Static;
 @{
     ViewData["Title"] = "Home Page";
-    var userName = String.IsNullOrEmpty(User.Identity.Name) ? "guest" : User.Identity.Name;
+
 }
 
-<div>    
-@*    <a class="btn btn-primary" asp-controller="Election" asp-action="Index">Elections</a>    *@
-    
+<div>        
     <header class="masthead" style="background-image:url('images/header-bg.jpg');">
         <div class="container">
             <div class="intro-text">

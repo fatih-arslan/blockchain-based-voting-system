@@ -19,10 +19,11 @@ namespace Entities.Models
         public string IdentificationNumber { get; set; }
 
         [Required(ErrorMessage = "Name is a required field.")]
-        public string Name { get; set; }
+        [Display(Name = "Name")]
+        public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Surname is a required field.")]
-        public string Surname { get; set; }
+        [Required(ErrorMessage = "Lastname is a required field.")]
+        public string Lastname { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         [InverseProperty("User")]

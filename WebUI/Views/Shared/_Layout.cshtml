@@ -12,51 +12,25 @@
 </head>
 <body>
     
-   @* <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebUI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>                                               
-                    </ul>
-                </div>
-                
-            </div>
-        </nav>       
-        
-    </header>*@
+    <header>      
 
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark mb-5" id="mainNav">
-@*        <div class="container">*@
+        <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark mb-5" id="mainNav">
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">BlockVote</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right" type="button" data-toogle="collapse" aria-controls="navbarResponsive" aria-expanded="false"
-                                                                          aria-label="Toggle navigation">
+                                                                                                  aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="nav navbar-nav ml-auto text-uppercase">
-@*                    <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="admin.html">Admin</a></li>*@
                     <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" asp-controller="Election" asp-action="Index">Vote Now</a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#about">Instructions</a></li>
                 </ul>
             </div>
             <partial name="_Identity.cshtml" />
-@*        </div>*@
-    </nav>
-    
-@*    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>*@
+        </nav>
+        
+    </header>   
 
-    <main role="main" class="pb-3">     
+    <main role="main" class="pb-3">        
         @RenderBody()
     </main>
 

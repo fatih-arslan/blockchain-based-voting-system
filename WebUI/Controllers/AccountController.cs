@@ -2,9 +2,11 @@
 using DataAccess.Static;
 using Entities.Models;
 using Entities.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace WebUI.Controllers
 {
@@ -17,6 +19,57 @@ namespace WebUI.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;            
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        public async Task<IActionResult> Users()
+        {
+            IEnumerable<ApplicationUser> users = await _userManager.Users.ToListAsync();
+            return View(users);
+        }
+
+        [Authorize(Roles = UserRoles.Voter)]
+        public async Task<IActionResult> Profile()
+        {
+            ApplicationUser? user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [Authorize(Roles = UserRoles.Voter)]
+        public async Task<IActionResult> Edit()
+        {
+            ApplicationUser? user = await _userManager.GetUserAsync(User);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ApplicationUser newUser)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(newUser.IdentificationNumber);
+                if(user != null)
+                {
+                    user.FirstName = newUser.FirstName;
+                    user.Lastname = newUser.Lastname;
+                    user.Email = newUser.Email;
+                    await _userManager.UpdateAsync(user);
+                    return RedirectToAction("Profile");
+                }
+                return View("NotFound");
+               
+            }
+            return View(newUser);
         }
       
         public IActionResult Login()
@@ -41,10 +94,17 @@ namespace WebUI.Controllers
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                     if(result.Succeeded)
-                    {
+                    {                        
                         user = await _userManager.Users
-                    .Include(u => u.Votes)
-                    .FirstOrDefaultAsync(u => u.Id == user.Id);
+                        .Include(u => u.Votes)
+                        .FirstOrDefaultAsync(u => u.Id == user.Id);
+                        var claims = new List<Claim>
+                        {
+                            new Claim("FirstName", user.FirstName),
+                            new Claim("LastName", user.Lastname),
+                        };
+
+                        await _userManager.AddClaimsAsync(user, claims);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -77,11 +137,12 @@ namespace WebUI.Controllers
 
             var newUser = new ApplicationUser
             {
-                Name = registerVM.Name,
-                Surname = registerVM.Surname,
+                FirstName = registerVM.Name,
+                Lastname = registerVM.Surname,
                 IdentificationNumber = registerVM.IdentificationNumber,
                 Email = registerVM.EmailAdress,
-                UserName = registerVM.IdentificationNumber
+                UserName = registerVM.IdentificationNumber,
+                RegistrationDate = DateTime.Now
             };
 
             var newUserResponse = await _userManager.CreateAsync(newUser, registerVM.Password);
