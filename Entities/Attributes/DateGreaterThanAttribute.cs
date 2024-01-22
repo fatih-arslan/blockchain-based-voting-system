@@ -22,7 +22,7 @@ namespace Entities.Attributes
             DateTime laterDate = (DateTime)value;
             DateTime earlierDate = (DateTime)validationContext.ObjectType.GetProperty(DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null);       
 
-            if (laterDate >= earlierDate)
+            if (laterDate > earlierDate)
             {
                 return ValidationResult.Success;
             }

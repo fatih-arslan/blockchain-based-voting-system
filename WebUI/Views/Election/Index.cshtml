@@ -17,8 +17,8 @@
                     <img src="@election.ImagePath" class="card-img-top" alt="Election Image" width="200" height="250">
                     <div class="card-body">
                         <h5 class="card-title">@election.Title</h5>
-                        <p class="card-text">Start Date: @election.StartDate.ToString("MMMM dd, yyyy")</p>
-                        <p class="card-text">End Date: @election.EndDate.ToString("MMMM dd, yyyy")</p>
+                        <p class="card-text">Start Date: @election.StartDate.ToString("dd-MM-yyyy HH:mm")</p>
+                        <p class="card-text">End Date: @election.EndDate.ToString("dd-MM-yyyy HH:mm")</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex">
                                 <a asp-controller="Election" asp-action="Details" asp-route-id="@election.Id" style="font-size=6px;" class="btn btn-outline-primary">View Details</a>
