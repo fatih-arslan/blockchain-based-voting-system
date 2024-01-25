@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Contracts;
+using Services.Utilities;
+using Services.Utilities.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,11 @@ builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<IElectionService, ElectionService>();   
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+var defaultImagePaths = builder.Configuration.GetSection("DefaultImages").Get<DefaultImagePaths>() ??
+    throw new InvalidOperationException("Default images configuration not found.");
+builder.Services.AddSingleton(defaultImagePaths);
 
 builder.Services.AddIdentity<ApplicationUser , IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

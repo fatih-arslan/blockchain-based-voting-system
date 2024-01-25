@@ -15,20 +15,25 @@ namespace Services
     public class CandidateService : ICandidateService
     {
         private readonly ICandidateRepository _candidateRepository;
+        private readonly DefaultImagePaths _defaultImagePaths;
 
-        public CandidateService(ICandidateRepository candidateRepository)
+        public CandidateService(ICandidateRepository candidateRepository, DefaultImagePaths defaultImagePaths)
         {
             _candidateRepository = candidateRepository;
+            _defaultImagePaths = defaultImagePaths;
         }
 
         public async Task AddCandidateAsync(Candidate candidate)
         {
-            string fileName = FileHelper.DefaultCandidateFileName;
             if(candidate.ImageFile != null)
             {
-                fileName = FileHelper.SaveImage(candidate.ImageFile);
+                string fileName = FileHelper.SaveImage(candidate.ImageFile);
+                candidate.ImagePath = $"/images/{fileName}";
             }
-            candidate.ImagePath = $"/images/{fileName}";
+            else
+            {
+                candidate.ImagePath = _defaultImagePaths.Candidate;
+            }
             await _candidateRepository.AddCandidateAsync(candidate);
         }
 
@@ -45,7 +50,7 @@ namespace Services
         public async Task RemoveCandidateAsync(Candidate candidate)
         {
             string? filePath = candidate.ImagePath;
-            if (filePath != null && filePath != FileHelper.DefaultCandidateFilePath)
+            if (filePath != null && filePath != _defaultImagePaths.Candidate)
             {
                 FileHelper.DeleteImage(filePath);
             }
@@ -57,7 +62,7 @@ namespace Services
             if(candidate.ImageFile != null)
             {
                 string? oldFilePath = candidate.ImagePath;
-                if (oldFilePath != null && oldFilePath != FileHelper.DefaultCandidateFilePath)
+                if (oldFilePath != null && oldFilePath != _defaultImagePaths.Candidate)
                 {
                     FileHelper.DeleteImage(oldFilePath);
                 }

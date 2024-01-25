@@ -16,28 +16,33 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Entities.DTOs;
 using DataAccess.Static;
+using Microsoft.Extensions.Configuration;
 
 namespace Services
 {
 
     public class ElectionService : IElectionService
     {
-        private readonly IElectionRepository _electionRepository;
+        private readonly IElectionRepository _electionRepository;   
+        private readonly DefaultImagePaths _defaultImagePaths;
 
-        public ElectionService(IElectionRepository electionRepository)
+        public ElectionService(IElectionRepository electionRepository, DefaultImagePaths defaultImageSettings)
         {
             _electionRepository = electionRepository;
+            _defaultImagePaths = defaultImageSettings;
         }
 
         public async Task AddElectionAsync(Election election)
         {
-            string fileName = FileHelper.DefaultElectionFileName;
             if(election.ImageFile != null)
             {
-                fileName = FileHelper.SaveImage(election.ImageFile);
-
+                string fileName = FileHelper.SaveImage(election.ImageFile);
+                election.ImagePath = $"/images/{fileName}";
             }
-            election.ImagePath = $"/images/{fileName}";
+            else
+            {
+                election.ImagePath = _defaultImagePaths.Election;
+            }
             await _electionRepository.AddElectionAsync(election);
         }
 
@@ -59,13 +64,13 @@ namespace Services
         public async Task RemoveElectionAsync(Election election)
         {
             string? filePath = election.ImagePath;
-            if(filePath != null && filePath != FileHelper.DefaultElectionFilePath) 
+            if(filePath != null && filePath != _defaultImagePaths.Election) 
             {
 				FileHelper.DeleteImage(filePath);
 			}
             foreach(Candidate c in election.Candidates)
             {
-                if(c.ImagePath != null && c.ImagePath != FileHelper.DefaultCandidateFilePath)
+                if(c.ImagePath != null && c.ImagePath != _defaultImagePaths.Election)
                 {
                     FileHelper.DeleteImage(c.ImagePath);
                 }
@@ -78,7 +83,7 @@ namespace Services
             if(election.ImageFile != null)
             {
                 string? oldFilePath = election.ImagePath;
-                if(oldFilePath != null && oldFilePath != FileHelper.DefaultElectionFilePath)
+                if(oldFilePath != null && oldFilePath != _defaultImagePaths.Election)
                 {                    
                     FileHelper.DeleteImage(oldFilePath);
                 }

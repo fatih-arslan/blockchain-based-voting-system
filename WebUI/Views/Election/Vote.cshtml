@@ -6,6 +6,7 @@
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var election = Model.Election;
     bool alreadyVoted = Model.UserAlreadyVoted;
+    bool expired = election.EndDate > DateTime.Now;
 }
 
 <!-- Include Web3.js library -->
@@ -32,7 +33,7 @@
                                 <h5 class="card-title text-dark opacity-75 text-uppercase text-center mb-2">@candidate.Name @candidate.Surname</h5>
                             </a>
                             <div class="d-flex justify-content-center">
-                                @if (alreadyVoted)
+                                @if (alreadyVoted || expired)
                                 {
                                     <button type="button" class="btn btn-success" disabled>Voted</button>
                                 }
@@ -59,7 +60,6 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <!-- Updated Vote button to trigger the Web3.js script -->
                                 <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="voteForCandidate('@election.Id', '@election.Title', '@candidate.Id', '@candidate.Name', '@userId')">Vote</button>
                             </div>
                         </div>

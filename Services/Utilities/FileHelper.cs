@@ -9,17 +9,13 @@ namespace Services.Utilities
 {
     public class FileHelper
     {
-        public static string DefaultElectionFileName { get; set; } = "electionDefault.png";
-        public static string DefaultCandidateFileName { get; set; } = "candidateDefault.jpg";
-        public static string DefaultElectionFilePath { get; set; } = $"/images/{DefaultElectionFileName}";
-        public static string DefaultCandidateFilePath { get; set; } = $"/images/{DefaultCandidateFileName}";
-        public static string DefaultDirectory { get; set; } = "wwwroot/images";
+        private static string defaultDirectory = "wwwroot/images";
 
         public static string SaveImage(IFormFile image, string path = null)
         {
             var fileName = image.FileName;
             var uniqueFileName = GetUniqueFileName(fileName);
-            var imagePath = path ?? Path.Combine(DefaultDirectory, uniqueFileName);
+            var imagePath = path ?? Path.Combine(defaultDirectory, uniqueFileName);
             using (var stream = new FileStream(imagePath, FileMode.Create))
             {
                 image.CopyTo(stream);
