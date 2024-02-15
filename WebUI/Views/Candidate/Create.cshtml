@@ -2,82 +2,83 @@
 @model Candidate
 
 @{
-    ViewData["Title"] = "Add Candidate";
+	ViewData["Title"] = "Add Candidate";
 }
 <div style="height:150px;"></div>
 <div class="container">
 
-    <h2>@ViewData["Title"]</h2>
+	<h2>@ViewData["Title"]</h2>
 
-    <div class="row"
+	<div class="row">
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="col-md-6">
-                <img src="@Configuration["DefaultImages:Candidate"]" width="75%" id="ImageURLPreview" />
-            </div>
-            <form asp-action="Create" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly"></div>
-                <input asp-for="ElectionId" hidden />
-                <div class="row">
-                    <div class="col-md-6">
-                        <input asp-for="ElectionId" type="hidden" value="@Model.ElectionId" />
-                        <input asp-for="ImagePath" class="form-control" hidden/>
-                        <div class="mb-3">
-                            <label asp-for="Name" class="form-label"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Surname" class="form-label"></label>
-                            <input asp-for="Surname" class="form-control" />
-                            <span asp-validation-for="Surname" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="ImageFile" class="form-label"></label>
-                            <input asp-for="ImageFile" class="form-control" id="ImageFile"/>
-                            <span asp-validation-for="ImageFile" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" style="resize:none" rows="6"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3" style="margin-top:10px;">
-                    <input type="submit" value="Add" class="btn btn-outline-success float-end" />
-                    <a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
-                </div>
-            </form>
-        </div>
-    </div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="col-md-6">
+					<img src="@Configuration["DefaultImages:Candidate"]" width="75%" id="ImageURLPreview" />
+				</div>
+				<form asp-action="Create" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly"></div>
+					<input asp-for="ElectionId" hidden />
+					<div class="row">
+						<div class="col-md-6">
+							<input asp-for="ElectionId" type="hidden" value="@Model.ElectionId" />
+							<input asp-for="ImagePath" class="form-control" hidden />
+							<div class="mb-3">
+								<label asp-for="Name" class="form-label"></label>
+								<input asp-for="Name" class="form-control" />
+								<span asp-validation-for="Name" class="text-danger"></span>
+							</div>
+							<div class="mb-3">
+								<label asp-for="Surname" class="form-label"></label>
+								<input asp-for="Surname" class="form-control" />
+								<span asp-validation-for="Surname" class="text-danger"></span>
+							</div>
+							<div class="mb-3">
+								<label asp-for="ImageFile" class="form-label"></label>
+								<input asp-for="ImageFile" class="form-control" id="ImageFile" />
+								<span asp-validation-for="ImageFile" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label asp-for="Description" class="form-label"></label>
+								<textarea asp-for="Description" class="form-control" style="resize:none" rows="6"></textarea>
+								<span asp-validation-for="Description" class="text-danger"></span>
+							</div>
+						</div>
+					</div>
+					<div class="mb-3" style="margin-top:10px;">
+						<input type="submit" value="Add" class="btn btn-outline-success float-end" />
+						<a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 </div>
 
-</div>
 <div style="height:150px;"></div>
 
 @section Scripts{
-    <script>
-        // Function to preview the selected image
-        function previewImage() {
-            var input = document.getElementById('ImageFile');
-            var preview = document.getElementById('ImageURLPreview');
+	<script>
+		// Function to preview the selected image
+		function previewImage() {
+			var input = document.getElementById('ImageFile');
+			var preview = document.getElementById('ImageURLPreview');
 
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
 
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
+				reader.onload = function (e) {
+					preview.src = e.target.result;
+				};
 
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
 
-        // Attach the 'change' event listener to the file input
-        document.getElementById('ImageFile').addEventListener('change', previewImage);
-    </script>
+		// Attach the 'change' event listener to the file input
+		document.getElementById('ImageFile').addEventListener('change', previewImage);
+	</script>
 }

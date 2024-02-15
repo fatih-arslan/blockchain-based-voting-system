@@ -26,7 +26,7 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var elections = await _electionService.GetAvailableElectionsAsync(false);            
+            var elections = await _electionService.GetAvailableElectionsAsync(trackChanges: false);            
             return View(elections);
         }
 
@@ -122,55 +122,4 @@ namespace WebUI.Controllers
             return View(result);
         }
     }
-
-    /*
-     * 
-     * 
-    
-    [Authorize(Roles = UserRoles.Admin)]
-public async Task<IActionResult> Edit(int id)
-{
-    Election? election = await _electionService.GetElectionByIdAsync(id, includeCandidates: true);
-    if (election == null)
-    {
-        return View("NotFound", new NotFoundVM("Election"));
-    }
-
-    // Map Election to ElectionUpdateDto
-    ElectionUpdateDto electionUpdateDto = _mapper.Map<ElectionUpdateDto>(election); // Assuming you're using AutoMapper or similar
-
-    ViewData["Referer"] = Request.Headers["Referer"].ToString();
-    return View(electionUpdateDto); // Pass ElectionUpdateDto to the view instead of Election
-}
-
-
-
-     
-     [HttpPost]
-public async Task<IActionResult> Edit(ElectionUpdateDto electionUpdateDto, string referer)
-{
-    if(ModelState.IsValid)
-    {
-        // Fetch the current election from the database
-        Election? currentElection = await _electionService.GetElectionByIdAsync(electionUpdateDto.Id, includeCandidates: true);
-
-        if(currentElection == null)
-        {
-            return View("NotFound", new NotFoundVM("Election"));
-        }
-
-        // Map ElectionUpdateDto to the current Election entity
-        _mapper.Map(electionUpdateDto, currentElection); // AutoMapper handles the mapping
-
-        // Update the election
-        await _electionService.UpdateElectionAsync(currentElection);
-
-        return Redirect(referer);
-    }            
-    return View(electionUpdateDto); // Return DTO to the view if validation fails
-}
-
-     
-     
-     */
 }

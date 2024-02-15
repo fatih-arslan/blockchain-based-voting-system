@@ -2,6 +2,7 @@
 using Entities.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,20 @@ namespace DataAccess.Data
 {
     public class AppDbInitializer
     {
-        public static async Task SeedUsersAndRoles(IApplicationBuilder applicationBuilder)
+		public static void ApplyDatabaseMigrations(IApplicationBuilder applicationBuilder)
+		{
+			using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+			{
+				var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+				dbContext.Database.Migrate();
+			}
+		}
+
+		public static async Task SeedUsersAndRoles(IApplicationBuilder applicationBuilder)
         {
             using(var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+				var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
                 if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
                 {

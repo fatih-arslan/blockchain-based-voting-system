@@ -64,5 +64,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+AppDbInitializer.ApplyDatabaseMigrations(app);
 AppDbInitializer.SeedUsersAndRoles(app).Wait();
 app.Run();
