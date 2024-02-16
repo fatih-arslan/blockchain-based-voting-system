@@ -19,5 +19,11 @@ namespace DataAccess.Repositories
         {
             await AddAsync(vote);
         }
-    }
+
+		public async Task<bool> UserAlreadyVotedAsync(string userId, int electionId)
+		{
+			var vote = await GetByConditionAsync(v => v.UserId == userId && v.ElectionId == electionId, trackChanges: false);
+			return vote != null;
+		}
+	}
 }

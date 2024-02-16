@@ -21,16 +21,16 @@ namespace WebUI.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public IActionResult Create(int electionId)
         {
-            return View(new Candidate {ElectionId = electionId});
+			return View(new Candidate {ElectionId = electionId});
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Candidate candidate)
         {
-            if (ModelState.IsValid)
+			if (ModelState.IsValid)
             {
                 await _candidateService.AddCandidateAsync(candidate);
-                return RedirectToAction("Edit", "Election", new {id = candidate.ElectionId});
+                return RedirectToAction("Edit", "Election", new {id = candidate.ElectionId, changeReferer = false});
             }     
             
             return View();
@@ -64,7 +64,7 @@ namespace WebUI.Controllers
             if (ModelState.IsValid)
             {
                 await _candidateService.UpdateCandidateAsync(newCandidate);
-                return RedirectToAction("Edit", "Election", new { id = newCandidate.ElectionId });
+                return RedirectToAction("Edit", "Election", new { id = newCandidate.ElectionId, changeReferer = false });
 
             }            
             return View(newCandidate);
@@ -78,7 +78,7 @@ namespace WebUI.Controllers
             {
                 int electionId = candidate.ElectionId;
                 await _candidateService.RemoveCandidateAsync(candidate);
-				return RedirectToAction("Edit", "Election", new { id = electionId });
+				return RedirectToAction("Edit", "Election", new { id = electionId, changeReferer = false });
 			}
             return View("NotFound", new NotFoundVM("Candidate"));
         }

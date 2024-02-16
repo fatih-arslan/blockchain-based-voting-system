@@ -2,6 +2,8 @@
 
 @{
 	ViewData["Title"] = "Edit Election";
+	var referer = TempData["Referer"];
+	TempData.Keep("Referer");
 }
 <div style="height:150px;"></div>
 <div class="container">
@@ -20,7 +22,7 @@
 				</div>
 				<form asp-action="Edit" enctype="multipart/form-data">
 					<div asp-validation-summary="ModelOnly"></div>
-					<input type="hidden" name="Referer" value="@ViewData["Referer"]" />
+					<input type="hidden" name="Referer" value="@referer" />
 					<div class="row">
 						<div class="col-md-6">
 							<div class="mb-3" hidden>
@@ -63,7 +65,7 @@
 					<div class="mb-3" style="margin-top:10px;">
 						<div class="row">
 							<div class="col-md-4">
-								<a class="btn btn-outline-secondary" href='javascript:history.go(-1)'>Back to list</a>
+								<a class="btn btn-outline-secondary" href="@referer">Back to list</a>
 							</div>
 							<div class="col-md-4">
 								<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal">Delete Election</button>

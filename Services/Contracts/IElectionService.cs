@@ -17,6 +17,8 @@ namespace Services.Contracts
         Task UpdateElectionAsync(Election election);
         Task RemoveElectionAsync(Election election);
         Task<ElectionResultVM> GetElectionResultAsync(int id);
+        Task<(Election? election, bool alreadyVoted)> GetElectionVotingDetailsAsync(int electionId, string userId);
 
-    }
+
+	}
 }

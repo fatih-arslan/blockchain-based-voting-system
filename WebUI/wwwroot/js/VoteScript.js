@@ -10,7 +10,6 @@
             const accounts = await web3.eth.getAccounts();
             const userAddress = accounts[0];
 
-            // Replace 'YOUR_CONTRACT_ADDRESS' with your actual smart contract address
 			const contractAddress = '0xCBF182146C06955Dd6CC0D82c3A76DF22f56e788';
 			const contractAbi = [
 				{
@@ -128,29 +127,22 @@
 					"stateMutability": "view",
 					"type": "function"
 				}
-			]; // Replace with your smart contract ABI
-
-            // Create a contract instance
+			]; 
+           
             const contract = new web3.eth.Contract(contractAbi, contractAddress);
-
-			// Replace 'vote' with the actual function in your smart contract for voting
+			
 			const transaction = contract.methods.vote(electionId, electionName, candidateId, candidateName);
-
-            // Send the transaction to the smart contract
+            
             const result = await transaction.send({
                 from: userAddress
             });
 
-            console.log('Vote transaction hash:', result.transactionHash);
-			console.log(`View your vote on Etherscan: https://etherscan.io/tx/${result.transactionHash}`);
-
 			
-        } else {
-            console.error('MetaMask not detected. Please install MetaMask and connect to your Ethereum account.');
+		} else {
+			alert('MetaMask not detected. Please install MetaMask and connect to your Ethereum account.');
 		}
 
 
-		// After the transaction is successful, send a POST request to your ASP.NET Core endpoint
 		await fetch('/Vote/AddVote', {
 			method: 'POST',
 			headers: {

@@ -26,7 +26,7 @@ namespace WebUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var elections = await _electionService.GetAvailableElectionsAsync(trackChanges: false);            
+			var elections = await _electionService.GetAvailableElectionsAsync(trackChanges: false);            
             return View(elections);
         }
 
@@ -66,15 +66,22 @@ namespace WebUI.Controllers
         }
 
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, bool changeReferer = true)
         {
             Election? election = await _electionService.GetElectionByIdAsync(id, true);
             if (election == null)
             {
                 return View("NotFound", new NotFoundVM("Election"));
             }
-            ElectionUpdateDTO updateDTO = _mapper.Map<ElectionUpdateDTO>(election);             
-            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+            ElectionUpdateDTO updateDTO = _mapper.Map<ElectionUpdateDTO>(election);
+            if (changeReferer)
+            {
+                TempData["Referer"] = Request.Headers["Referer"].ToString();
+            }
+            else
+            {
+                TempData.Keep("Referer");
+            }
             return View(updateDTO);
         }
 
@@ -98,21 +105,19 @@ namespace WebUI.Controllers
                 await _electionService.RemoveElectionAsync(election);
             }
             var referringUrl = Request.Headers["Referer"].ToString();
-            return Redirect(string.IsNullOrEmpty(referringUrl) ? "/" : referringUrl);            
+			return Redirect(string.IsNullOrEmpty(referringUrl) ? "/" : referringUrl);            
         }
 
         [Authorize(Roles = UserRoles.Voter)]
         public async Task<IActionResult> Vote(int id)
         {
-            Election? election = await _electionService.GetElectionByIdAsync(id, false);
-            ApplicationUser currentUser =  await _userManager.GetUserAsync(User);
-            currentUser = _userManager.Users.Include(u => u.Votes).FirstOrDefault(u => u.Id == currentUser.Id);
-            bool alreadyVoted = currentUser.Votes.Any(vo => vo.ElectionId == id);
-            VoteVM voteVM = new VoteVM { UserAlreadyVoted = alreadyVoted, Election = election };
-            if (election == null)
-            {
-                return View("NotFound", new NotFoundVM("Election"));
-            }
+			ApplicationUser currentUser = await _userManager.GetUserAsync(User);
+			var (election, alreadyVoted) = await _electionService.GetElectionVotingDetailsAsync(id, currentUser.Id);
+			if (election == null)
+			{
+				return View("NotFound", new NotFoundVM("Election"));
+			}
+			VoteVM voteVM = new VoteVM { UserAlreadyVoted = alreadyVoted, Election = election };           
             return View(voteVM);
         }
 

@@ -17,6 +17,9 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 using Entities.DTOs;
 using DataAccess.Static;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.Design;
 
 namespace Services
 {
@@ -25,14 +28,16 @@ namespace Services
     {
         private readonly IElectionRepository _electionRepository;   
         private readonly DefaultImagePaths _defaultImagePaths;
+        private readonly IVoteRepository _voteRepository;
 
-        public ElectionService(IElectionRepository electionRepository, DefaultImagePaths defaultImageSettings)
-        {
-            _electionRepository = electionRepository;
-            _defaultImagePaths = defaultImageSettings;
-        }
+		public ElectionService(IElectionRepository electionRepository, DefaultImagePaths defaultImageSettings, IVoteRepository voteRepository)
+		{
+			_electionRepository = electionRepository;
+			_defaultImagePaths = defaultImageSettings;
+			_voteRepository = voteRepository;
+		}
 
-        public async Task AddElectionAsync(Election election)
+		public async Task AddElectionAsync(Election election)
         {
             if(election.ImageFile != null)
             {
@@ -93,7 +98,14 @@ namespace Services
             await _electionRepository.UpdateElectionAsync(election);
         }
 
-        public async Task<ElectionResultVM> GetElectionResultAsync(int id)
+		public async Task<(Election? election, bool alreadyVoted)> GetElectionVotingDetailsAsync(int electionId, string userId)
+		{
+            var election = await _electionRepository.GetElectionByIdAsync(electionId, false);
+            bool alreadyVoted = await _voteRepository.UserAlreadyVotedAsync(userId, electionId);
+			return (election, alreadyVoted);
+		}
+
+		public async Task<ElectionResultVM> GetElectionResultAsync(int id)
         {
             string apiKey = APIKeys.InfuraSepoliaAPI;
             var web3 = new Web3($"https://sepolia.infura.io/v3/{apiKey}");

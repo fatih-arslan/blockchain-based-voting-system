@@ -10,5 +10,7 @@ namespace DataAccess.Repositories.Contracts
     public interface IVoteRepository
     {
         Task AddVoteAsync(Vote vote);
-    }
+        Task<bool> UserAlreadyVotedAsync(string userId, int electionId);
+
+	}
 }
